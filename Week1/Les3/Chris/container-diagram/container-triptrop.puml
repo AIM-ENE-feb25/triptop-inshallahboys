@@ -27,8 +27,8 @@ System_Ext(emailVerifier, "Email verifier-API", "API voor het verifiëren van e-
 System_Ext(veriphone, "Veriphone-API", "API voor het verifiëren van telefoonnummers")
 
 'Relaties
-Rel(webApp, backend, "Stuurt data door")
-Rel(adminApp, backend, "Stuurt data door")
+Rel(webApp, backend, "Stuurt data door", "HTTP")
+Rel(adminApp, backend, "Stuurt data door", "HTTP")
 Rel(reisAgent, adminApp, "Gebruikt de reisagent een andere webapplicatie?")
 Rel(reiziger, webApp, "Boekt, annuleert, past aan en betaalt de reis")
 
