@@ -7,8 +7,9 @@ Person(reiziger, "Reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
 Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
 
 System_Boundary(c4, Triptop) {
-Container(webApp, "Web-Applicatie", "?", "Gebruikersinterface voor reizigers")
+Container(webApp, "Web-Applicatie", "REACT/JS", "Gebruikersinterface voor reizigers")
 Container(backend, "Backend", "Java?", "verwerkt de logica achter de schremen")
+Container(database, "Database", "SQL", "voor het opslaan van data")
 }
 
 System_Ext(wiremock, "Wiremock API", "voor de authenticatie van de gebruiker")
@@ -25,15 +26,16 @@ System_Ext(veriphone, "Veriphone API", "Api om de reizigers telefoonnummer te ve
 Rel(reiziger, webApp, "Bouwt reizen met")
 Rel(reisAgent, webApp, "Gebruikt de reisAgent dezelfde webapp?")
 Rel(webApp, backend, "stuurt data door naar", "HTTP?")
+Rel(backend, database, "leest/schrijft")
 
 Rel(backend, wiremock, "Maakt Api verzoeken naar")
-Rel(backend, booking, "Maakt Api verzoeken naar")
-Rel(backend, tripadvisor, "Maakt Api verzoeken naar")
-Rel(backend, uberEats, "Maakt Api verzoeken naar")
-Rel(backend, googleFlights, "Maakt Api verzoeken naar")
-Rel(backend, cheapFlights, "Maakt Api verzoeken naar")
-Rel(backend, airbnb, "Maakt Api verzoeken naar")
+Rel(webApp, booking, "Maakt Api verzoeken naar")
+Rel(webApp, tripadvisor, "Maakt Api verzoeken naar")
+Rel(webApp, uberEats, "Maakt Api verzoeken naar")
+Rel(webApp, googleFlights, "Maakt Api verzoeken naar")
+Rel(webApp, cheapFlights, "Maakt Api verzoeken naar")
+Rel(webApp, airbnb, "Maakt Api verzoeken naar")
 Rel(backend, smsGateway, "Maakt Api verzoeken naar")
 Rel(backend, emailVerifier, "Maakt Api verzoeken naar")
-Rel(backend, veriphone3, "Maakt Api verzoeken naar")
+Rel(backend, veriphone, "Maakt Api verzoeken naar")
 @enduml
