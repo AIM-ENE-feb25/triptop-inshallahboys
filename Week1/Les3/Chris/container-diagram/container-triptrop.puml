@@ -3,12 +3,14 @@
 
 SHOW_PERSON_OUTLINE()
 
+'Actoren
 Person(reiziger, "reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
 Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
 
+'Containers binnen het systeem
 System_Boundary(c4, "Triptrop") {
     Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
-    Container(adminApp, "Admin applicatie", "React.js", "Gebruikersinterface voor reis agenten")
+    Container(adminApp, "Admin applicatie?", "?", "Gebruikersinterface voor reis agenten?")
     Container(backend, "Backend", "Java", "Verwerkt alle logica")
 }
 
@@ -23,10 +25,6 @@ System_Ext(airbnb, "Airbnb-API", "API voor het boeken van accomodaties via Airbn
 System_Ext(smsGateway, "Sms gateway-API", "API voor het verzenden van sms-berichten")
 System_Ext(emailVerifier, "Email verifier-API", "API voor het verifiëren van e-mailadressen")
 System_Ext(veriphone, "Veriphone-API", "API voor het verifiëren van telefoonnummers")
-
-
-
-
 
 'Relaties
 Rel(webApp, backend, "Stuurt data door")
