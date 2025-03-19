@@ -1,0 +1,49 @@
+@startuml
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+
+Person(reiziger, "reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
+Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
+
+System_Boundary(c4, "Triptrop") {
+    Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
+    Container(adminApp, "Admin applicatie", "React.js", "Gebruikersinterface voor reis agenten")
+    Container(backend, "Backend", "Java", "Verwerkt alle logica")
+}
+
+'API's
+System_Ext(wireMock, "WireMock", "API voor webapplicatie")
+System_Ext(bookingAPI, "Booking-API", "API voor boeken van reizen via Booking.com")
+System_Ext(tripAdvisor, "TripAdvisor-API", "API voor boeken van reizen via TripAdvisor")
+System_Ext(uberEats, "UberEats-API", "API voor het bestellen van eten via UberEats")
+System_Ext(googleFlights, "Google flights-API", "API van het boeken van vluchten via Google Flights")
+System_Ext(cheapFlights, Cheap flights-API"", "API voor het boeken van vluchten via Cheap Flights")
+System_Ext(airbnb, "Airbnb-API", "API voor het boeken van accomodaties via Airbnb")
+System_Ext(smsGateway, "Sms gateway-API", "API voor het verzenden van sms-berichten")
+System_Ext(emailVerifier, "Email verifier-API", "API voor het verifiëren van e-mailadressen")
+System_Ext(veriphone, "Veriphone-API", "API voor het verifiëren van telefoonnummers")
+
+
+
+
+
+'Relaties
+Rel(webApp, backend, "Stuurt data door")
+Rel(adminApp, backend, "Stuurt data door")
+Rel(reisAgent, adminApp, "Gebruikt de reisagent een andere webapplicatie?")
+Rel(reiziger, webApp, "Boekt, annuleert, past aan en betaalt de reis")
+
+Rel(backend, wireMock, "Mockt API's voor testen")
+Rel(backend, bookingAPI, "Maakt API-verzoeken naar")
+Rel(backend, tripAdvisor, "Maakt API-verzoeken naar")
+Rel(backend, uberEats, "Maakt API-verzoeken naar")
+Rel(backend, googleFlights, "Maakt API-verzoeken naar")
+Rel(backend, cheapFlights, "Maakt API-verzoeken naar")
+Rel(backend, airbnb, "Maakt API-verzoeken naar")
+Rel(backend, smsGateway, "Maakt API-verzoeken naar")
+Rel(backend, emailVerifier, "Maakt API-verzoeken naar")
+Rel(backend, veriphone, "Maakt API-verzoeken naar")
+
+
+@enduml
