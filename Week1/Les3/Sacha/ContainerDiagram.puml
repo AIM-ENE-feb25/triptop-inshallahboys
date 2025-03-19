@@ -1,0 +1,44 @@
+@startuml
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+
+LAYOUT_TOP_DOWN()
+Person(reiziger, "Reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
+Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
+
+System_Boundary(C4, "Triptop"){
+Container(systemAlias, "Web Applicatie", "React.js", "Biedt de gebruiker de mogelijkheid om een reis te boeken")
+Container(backend, "Backend", "Java", "Verzorgt de business logica en gegevens verwerking")
+Container(cache, "Cache", "Redis", "zorgt voor snelle toegang tot veelgebruikte gegevens")
+}
+System_Ext(wiremock, "Wiremock APi", "Autorisatie API")
+System_Ext(tripadvisor, "Tripadvisor API", "Helpt reizigers met het vinden van excursies")
+System_Ext(booking, "Booking.com", "Helpt reizigers met het vinden van overnachtingen")
+System_Ext(uberEats, "Uber Eats", "Helpt reizigers met het vinden van eten en drinken")
+System_Ext(airbnb, "Airbnb", "Helpt reizigers met het vinden van overnachtingen")
+System_Ext(googleFlights, "Google Flights", "Helpt reizigers met het vinden van vervoer")
+System_Ext(cheapFlights, "Cheap Flights", "Helpt reizigers met het vinden van vervoer")
+System_Ext(smsGateway, "SMS Gateway", "Verstuurt SMS berichten naar reizigers")
+System_Ext(emailverificatie, "Email Verifier", "Verstuurt email verificatie berichten naar reizigers")
+System_Ext(veriPhone, "VeriPhone", "Verstuurt verificatie berichten naar reizigers")
+
+
+Rel(reiziger, systemAlias, Stelt reis samen met)
+Rel(reisAgent, systemAlias, Helpt als reiziger er niet uitkomt met plannen?)
+Rel(systemAlias, backend, "Verzorgt de business logica en gegevens verwerking")
+Rel(backend, cache, "Zorgt voor snelle toegang tot veelgebruikte gegevens")
+Rel(backend, wiremock, "Gebruikt zodat de reiziger kan inloggen met Google, Microsoft, etc")
+Rel(backend, tripadvisor, "Boekt excursies")
+Rel(backend, booking, "Boekt overnachtingen")
+Rel(backend, uberEats, "Besteld voedsel en drinken")
+Rel(backend, airbnb, "Boekt overnachtingen")
+Rel(backend, googleFlights, "Vraagt beschikbare reizen op")
+Rel(backend, cheapFlights, "Vraagt beschikbare reizen op")
+Rel(backend, smsGateway, "Verstuurt SMS berichten naar reizigers")
+Rel(backend, emailverificatie, "Verstuurt email verificatie berichten naar reizigers")
+Rel(backend, veriPhone, "Verstuurt verificatie berichten naar reizigers")
+
+
+
+@enduml
