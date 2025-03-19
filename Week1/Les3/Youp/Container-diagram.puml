@@ -1,0 +1,39 @@
+@startuml
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+
+Person(reiziger, "Reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
+Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
+
+System_Boundary(c4, Triptop) {
+Container(webApp, "Web-Applicatie", "?", "Gebruikersinterface voor reizigers")
+Container(backend, "Backend", "Java?", "verwerkt de logica achter de schremen")
+}
+
+System_Ext(wiremock, "Wiremock API", "voor de authenticatie van de gebruiker")
+System_Ext(booking, "Booking.com API", "Api voor het boeken van reizen via booking.com")
+System_Ext(tripadvisor, "Tripadvisor API", "Api voor het boeken van excuries voor reizen")
+System_Ext(uberEats, "UberEats API", "Api voor het bestellen van voedsel")
+System_Ext(googleFlights, "Google Flights API", "Api voor het boeken van vluchten voor je reis")
+System_Ext(cheapFlights, "Cheap Flights API", "Api voor het boeken van goedkope vluchten voor je reis")
+System_Ext(airbnb, "Airbnb API", "Api voor het boeken van verblijvingen om te overnachten")
+System_Ext(smsGateway, "Sms Gateway API", "Api voor het verzenden van sms berichten")
+System_Ext(emailVerifier, "Email Verifier API", "Api om de reizigers email te verifieren")
+System_Ext(veriphone, "Veriphone API", "Api om de reizigers telefoonnummer te verifieren")
+
+Rel(reiziger, webApp, "Bouwt reizen met")
+Rel(reisAgent, webApp, "Gebruikt de reisAgent dezelfde webapp?")
+Rel(webApp, backend, "stuurt data door naar", "HTTP?")
+
+Rel(backend, wiremock, "Maakt Api verzoeken naar")
+Rel(backend, booking, "Maakt Api verzoeken naar")
+Rel(backend, tripadvisor, "Maakt Api verzoeken naar")
+Rel(backend, uberEats, "Maakt Api verzoeken naar")
+Rel(backend, googleFlights, "Maakt Api verzoeken naar")
+Rel(backend, cheapFlights, "Maakt Api verzoeken naar")
+Rel(backend, airbnb, "Maakt Api verzoeken naar")
+Rel(backend, smsGateway, "Maakt Api verzoeken naar")
+Rel(backend, emailVerifier, "Maakt Api verzoeken naar")
+Rel(backend, veriphone3, "Maakt Api verzoeken naar")
+@enduml
