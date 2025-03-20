@@ -4,8 +4,8 @@
 SHOW_PERSON_OUTLINE()
 
 'Actoren
-Person(reiziger, "reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
 Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
+Person(reiziger, "reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
 
 'Containers binnen het systeem
 System_Boundary(c4, "Triptrop") {
@@ -28,6 +28,7 @@ System_Ext(emailVerifier, "Email verifier-API", "API voor het verifiëren van e-
 System_Ext(veriphone, "Veriphone-API", "API voor het verifiëren van telefoonnummers")
 
 'Relaties
+Rel(reisAgent, adminApp, "Gebruikt", "HTTP")
 Rel(webApp, backend, "Stuurt data door", "HTTP")
 Rel(adminApp, backend, "Stuurt data door", "HTTP")
 Rel(reiziger, webApp, "Boekt, annuleert, past aan en betaalt de reis")
