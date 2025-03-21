@@ -29,7 +29,7 @@ Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te 
 - [Expedia Developer](https://developer.expediagroup.com/)
 
 ## Decision
-We hebben ervoor gekozen om **Expedia** te gebruiken over **Tripadvisor** en een eigen database.
+We hebben ervoor gekozen om **Tripadvisor** te gebruiken over **Expedia** en een eigen database.
 
 ## Consequences
 Dit onderzoek is nog niet volledig onderzocht en er zijn nog veel onbekende nadelen van Expedia die we nog niet weten!
