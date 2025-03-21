@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Sequence.puml
+
+autonumber
+
+
+actor "reiziger (auth-ed)" as R
+participant webApp
+participant Booking.com as API
+participant backend
+database DB
+
+R -> webApp: Books a trip on Triptrop
+webApp -> API: Books a trip
+API -> backend: Fetches trip details
+backend -> DB: Stores trip details
+DB -> backend: Returns trip details
+backend -> API: Returns trip details
+API -> webApp: Confirms booking
+webApp -> R: Shows confirmed booking
+
+
+
+
+@enduml
