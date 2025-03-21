@@ -1,0 +1,21 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Sequence.puml
+
+actor reiziger
+participant webApp
+participant backend
+participant wiremock
+database DB
+
+
+reiziger -> webApp : Submits username and password
+webApp -> backend : Sends username and password via HTTP
+backend -> DB : select * from users where username = ?
+DB -> backend : Returns user details
+backend -> wiremock : Calls authentication method with user details
+wiremock -> backend : Returns authentication result
+backend -> webApp : Sends authentication response
+webApp -> reiziger : Displays login result
+
+@enduml
+
