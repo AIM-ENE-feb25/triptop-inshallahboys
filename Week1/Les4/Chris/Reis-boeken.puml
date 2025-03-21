@@ -5,10 +5,13 @@ autonumber
 
 
 actor "reiziger (auth-ed)" as R
-participant webApp
-participant Booking.com as API
-participant backend
-database DB
+System_Boundary(c4, "Triptrop")
+Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
+Container(backend, "Backend", "Java", "Verwerkt alle logica")
+Container(DB, "Database", "?", "Opslaan van data")
+Boundary_End()
+System_Ext(API, "Booking API", "?")
+
 
 R -> webApp: Books a trip on Triptrop
 webApp -> API: Books a trip
