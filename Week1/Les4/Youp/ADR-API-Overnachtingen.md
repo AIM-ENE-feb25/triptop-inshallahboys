@@ -28,4 +28,4 @@ Waarom deze criteria:
 We hebben ervoor gekozen om Booking.com te gebruiken over Hotels.com en eigen database.
 
 ## Consequences
-We hebben dit onderzoek nog niet heel erg grondig uitgevoerd en hierdoor zijn er veel andelen van booking.com die we simpel weg nog niet weten!
+We hebben dit onderzoek nog niet heel erg grondig uitgevoerd en hierdoor zijn er veel nadelen van booking.com die we simpel weg nog niet weten!
