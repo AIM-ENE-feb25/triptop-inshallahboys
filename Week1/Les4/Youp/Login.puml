@@ -1,19 +1,19 @@
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Sequence.puml
 
+autonumber
+
 actor reiziger
-participant webApp
-participant backend
-participant wiremock
-database DB
+System_Boundary(c4, "Triptrop")
+Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
+Container(backend, "Backend", "Java", "Verwerkt alle logica")
+Boundary_End()
+System_Ext(wireMock, "WireMock", "API voor webapplicatie")
 
 
 reiziger -> webApp : Submits username and password
-webApp -> backend : Sends username and password via HTTP
-backend -> DB : select * from users where username = ?
-DB -> backend : Returns user details
-backend -> wiremock : Calls authentication method with user details
-wiremock -> backend : Returns authentication result
+webApp -> wireMock : Sends username and password via HTTP
+wireMock -> backend : Stores token
 backend -> webApp : Sends authentication response
 webApp -> reiziger : Displays login result
 
