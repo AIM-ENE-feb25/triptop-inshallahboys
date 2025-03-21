@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Sequence.puml
+
+autonumber
+
+
+actor "reiziger (auth-ed)" as R
+System_Boundary(c4, "Triptrop")
+Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
+Container(backend, "Backend", "Java", "Verwerkt alle logica")
+Container(DB, "Database", "?", "Opslaan van data")
+Boundary_End()
+System_Ext(API, "Booking API", "?")
+
+
+R -> webApp: Books a trip on Triptrop
+webApp -> API: Books a trip
+API -> backend: Fetches trip details
+backend -> DB: Stores trip details
+DB -> backend: Returns trip details
+backend -> API: Returns trip details
+API -> webApp: Confirms booking
+webApp -> R: Shows confirmed booking
+
+
+
+
+@enduml

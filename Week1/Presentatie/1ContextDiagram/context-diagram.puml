@@ -1,0 +1,25 @@
+@startuml
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+
+Person(reiziger, "Reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
+Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
+System(systemAlias, "Triptop", "Systeem die communiceert met externe systeem voor vakanties")
+System_Ext(authAPI, "Authorisatie API", "Centraal inlog systeem")
+System_Ext(vervoerAPI, "Vervoer API", "Mogelijke vervoer opties voor de reis")
+System_Ext(eetDrinkAPI, "Eten en drinken API", "Mogelijke eet en drink opties voor de reis")
+System_Ext(overnachtingAPI, "Overnachting API", "Mogelijke overnachtingen ophalen")
+System_Ext(autohuurAPI, "Autohuur API", "Mogelijke autohuur opties voor de reis")
+System_Ext(excursieAPI, "Excursie API", "Mogelijke excursies voor de reis")
+
+Rel(reiziger, systemAlias, Stelt reis samen met)
+Rel(reisAgent, systemAlias, Helpt als reiziger er niet uitkomt met plannen)
+Rel(systemAlias, authAPI, "Gebruikt zodat de reiziger kan inloggen met Google, Microsoft, etc")
+Rel(systemAlias, vervoerAPI, vraagt beschikbare reizen op)
+Rel(systemAlias, eetDrinkAPI, besteld voedsel en drinken)
+Rel(systemAlias, overnachtingAPI, boekt overnachtingen)
+Rel(systemAlias, autohuurAPI, huur auto boeken)
+Rel(systemAlias, excursieAPI, boekt excursies)
+
+@enduml
