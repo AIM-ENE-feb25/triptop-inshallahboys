@@ -32,4 +32,4 @@ Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te 
 We hebben ervoor gekozen om **Tripadvisor** te gebruiken over **Expedia** en een eigen database.
 
 ## Consequences
-Dit onderzoek is nog niet volledig onderzocht en er zijn nog veel onbekende nadelen van Expedia die we nog niet weten!
+Dit onderzoek is nog niet volledig onderzocht en er zijn nog veel onbekende nadelen van Tripadvisor die we nog niet weten!
