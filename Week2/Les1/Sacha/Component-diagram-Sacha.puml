@@ -8,14 +8,10 @@ Container_Boundary(c1, "Backend") {
     Component(expenseControllerAdvice, "expenseControllerAdvice", "Controller", "Handles login requests")
     Component(expenseRepository, "ExpenseRepository", "Repository", "Data access for expenses")
     Component(AuthenticationService, "AuthenticationService", "Service", "Data access for users")
-    ComponentDb(database, "Database", "Database", "Stores application data")
     Component(Usertoken, "Usertoken", "Repository", "Data access for usertoken")
 }
 
 Rel(expenseController, expenseRepository, "Uses")
 Rel("expenseControllerAdvice", "AuthenticationService", "Uses")
-Rel(expenseRepository, database, "Reads/Writes")
 Rel("AuthenticationService", "Usertoken", "uses")
-Rel("Usertoken", "database", "Reads/Writes")
-
 @enduml
