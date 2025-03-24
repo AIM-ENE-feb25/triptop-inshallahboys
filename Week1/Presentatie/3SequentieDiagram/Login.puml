@@ -3,7 +3,7 @@
 
 autonumber
 
-actor reiziger
+actor Traveler
 System_Boundary(c4, "Triptrop")
 Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
 Container(backend, "Backend", "Java", "Verwerkt alle logica")
@@ -11,11 +11,12 @@ Boundary_End()
 System_Ext(wireMock, "WireMock", "API voor webapplicatie")
 
 
-reiziger -> webApp : Submits username and password
-webApp -> wireMock : Sends username and password via HTTP
-wireMock -> backend : Stores token
-backend -> webApp : Sends authentication response
-webApp -> reiziger : Displays login result
+Traveler -> webApp : Submits username and password
+webApp -> backend : sends username and password
+backend -> wireMock : Sends username and password
+wireMock --> backend : returns token
+backend --> webApp : Sends authentication response
+webApp --> Traveler : Displays login result
 
 @enduml
 
