@@ -9,8 +9,10 @@ Container_Boundary(c1, "Backend") {
     Component(customUserDetailService, "CustomUserDetailService", "Service", "Handles logic")
     Component(expenseRepository, "ExpenseRepository", "Repository", "Data access for expenses")
     Component(userRepository, "UserRepository", "Repository", "Data access for users")
-    ComponentDb(database, "Database", "Database", "Stores application data")
 }
+
+ComponentDb(database, "Database", "Database", "Stores application data")
+
 
 Rel(expenseController, customUserDetailService, "Uses")
 Rel(loginController, customUserDetailService, "Uses")
