@@ -1,0 +1,22 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Backend Component Diagram
+
+Container_Boundary(c1, "Backend") {
+    Component(expenseController, "ExpenseController", "Controller", "Handles expense requests")
+    Component(loginController, "LoginController", "Controller", "Handles login requests")
+    Component(customUserDetailService, "CustomUserDetailService", "Service", "Handles logic")
+    Component(expenseRepository, "ExpenseRepository", "Repository", "Data access for expenses")
+    Component(userRepository, "UserRepository", "Repository", "Data access for users")
+    ComponentDb(database, "Database", "Database", "Stores application data")
+}
+
+Rel(expenseController, customUserDetailService, "Uses")
+Rel(loginController, customUserDetailService, "Uses")
+Rel(customUserDetailService, userRepository, "Uses")
+Rel(customUserDetailService, expenseRepository, "Uses")
+Rel(expenseRepository, database, "Reads/Writes")
+Rel(userRepository, database, "Reads/Writes")
+
+@enduml
