@@ -3,7 +3,7 @@
 ## Voorbereiding
 - LoginController
 - LoginService
-- IdentityProvider - API / Adapter. (Ik denk dat we hier even overna moeten gaan denken om hier ook een adapter te gaan gebruiken.)
+- IdentityProvider - API / Adapter. (Ik denk dat we hier even overna moeten gaan denken om hier ook een adapter te gaan gebruiken en kijken of de repo nodig is..)
 - UserRepository
 
 ## Verantwoordelijkheden
