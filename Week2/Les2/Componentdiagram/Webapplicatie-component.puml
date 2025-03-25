@@ -3,4 +3,17 @@
 
 title Frotend Component Diagram Triptop
 
+Container_Boundary(c1, "React Frontend") {
+    Component(App, "App", "Hoofdcomponent", "Bevat routing en globale state")
+
+    Component(Navbar, "Navbar", "Component", "Navigatiebalk")
+    Component(HomePage, "HomePage", "Pagina", "Startpagina met content")
+    Component(loginPage, "LoginPage", "Pagina", "Loginpagina")
+
+}
+
+Rel(App, Navbar, "Rendert")
+Rel(App, HomePage, "Rendert")
+Rel(App, loginPage, "Rendert")
+
 @enduml
