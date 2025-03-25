@@ -1,0 +1,72 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Backend Component Diagram Triptop
+
+Container_Boundary(backend, "Triptop Backend") {
+
+    ' Inloggen van reizigers
+    Component(loginController, "LoginController", "RESTController", "Handles login requests")
+    Component(loginService, "LoginService", "Service", "Handles login logic")
+    Component(userRepository, "UserRepository", "Spring JPA Repository", "Handles user data")
+
+
+
+    ' Alle bouwstenen bij elkaar
+    Component(tripController, "TripController", "RESTController", "Handles trip requests")
+    Component(tripService, "TripService", "Service", "Handles trip logic")
+    Component(tripRepository, "TripRepository", "Spring JPA Repository", "Handles trip data")
+
+
+    ' 1 enkele bouwsteen
+    Component(bouwsteenController, "bouwsteenController", "RESTController", "Handles bouwsteen requests")
+    Component(bouwsteenService, "bouwsteenService", "Service", "Handles bouwsteen logic")
+    Component(bouwsteenRepository, "bouwsteenRepository", "Spring JPA Repository / Interface", "Handles bouwsteen data")
+    Component(tripAdvisorAdapter, "tripAdvisorAdapter", "Spring JPA Adapter", "Handles excursie data")
+    Component(bookingAPIAdapter, "bookingAPIAdapter", "Spring JPA Adapter", "Handles verblijf data")
+    Component(vervoerAdapter, "vervoerAdapter", "Spring JPA Adapter", "Handles vervoer data")
+
+
+}
+
+' Webapplicatie
+Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
+
+' External systemen (API's) en Database
+ComponentDb(DB, "Database", "Database", "Stores all data")
+Component_Ext(identityProvider, "identityProvider", "", "API voor authenticatie")
+Component_Ext(bookingAPI, "Booking-API", "", "API voor boeken van trips via Booking.com")
+Component_Ext(tripAdvisor, "TripAdvisor-API", "", "API voor trips via tripAdvisor")
+Component_Ext(flightsAPI, "Flights-API", "", "API voor vluchten")
+
+
+Rel(webApp, bouwsteenController, "Stuurt data door")
+Rel(webApp, tripController, "Stuurt data door")
+Rel(webApp, loginController, "Stuurt data door")
+
+Rel(loginController, loginService, "Stuurt data door")
+Rel(loginService, userRepository, "Stuurt verwerkte logica door")
+Rel(loginService, identityProvider, "Vraagt token op")
+
+Rel(tripController, tripService, "Stuurt data door")
+Rel(tripService, bouwsteenRepository, "Stuurt verwerkte logica door")
+Rel(tripService, tripRepository, "Stuurt verwerkte logica door")
+
+Rel(bouwsteenController, bouwsteenService, "Stuurt data door")
+Rel(bouwsteenService, bouwsteenRepository, "Stuurt verwerkte logica door")
+
+Rel(bouwsteenRepository, tripAdvisorAdapter, "Soort bouwsteen van tripadvisor")
+Rel(bouwsteenRepository, bookingAPIAdapter, "Soort bouwsteen van booking.com")
+Rel(bouwsteenRepository, vervoerAdapter, "Soort bouwsteen van NS")
+
+Rel(tripRepository, DB, "Leest en schrijft")
+Rel(userRepository, DB, "Leest en schrijft")
+Rel(bouwsteenRepository, DB, "Leest en schrijft")
+
+Rel(tripAdvisorAdapter, tripAdvisor, "Vraagt excursies op")
+Rel(bookingAPIAdapter, bookingAPI, "Vraagt verblijven op")
+Rel(vervoerAdapter, flightsAPI, "Vraagt vervoer op")
+
+
+
+@enduml
