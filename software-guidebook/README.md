@@ -66,9 +66,7 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 * Security -> Confidentiality (Degree to which a system, product or component ensures that data are accessible only to those authorized to have access)
 
 ## 5. Constraints
-
-> [!IMPORTANT]
-> Beschrijf zelf de beperkingen die op voorhand bekend zijn die invloed hebben op keuzes die wel of niet gemaakt kunnen of mogen worden.
+Lars vindt dit stom.
 
 ## 6. Principles
 
