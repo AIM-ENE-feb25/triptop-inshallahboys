@@ -80,10 +80,19 @@ Lars vindt dit stom.
 > [!IMPORTANT]
 > Voeg toe: Container Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
+![contextdiagram](diagrammen/contextdiagram/context-triptop.png)
+
 ###     7.2. Components
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
+
+#### Backend
+
+![component-backend](diagrammen/componentdiagram/component-triptop-backend.png)
+
+#### Frontend
+
 
 ###     7.3. Design & Code
 
