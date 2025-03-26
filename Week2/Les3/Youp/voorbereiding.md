@@ -83,9 +83,16 @@ class LoginService{
     -getToken(username, password) : ResponseEntity<String>
 }
 
+class Route {
+    - locationStart: String
+    - locationEnd: String
+    - id: Integer
+    - type: String
+}
+
 class VervoerAdapter {
     <<interface>>
-    + getRoute(Location start, Location end, Integer): Route
+    + getRoute(String start, String end, Integer id): Route
 }
 
 class flightsAPI{
@@ -95,6 +102,7 @@ class flightsAPI{
 BuildingBlockController --> BuildingBlockService : uses
 BuildingBlockService --> LoginService : checks if user is auth
 BuildingBlockService --> VervoerAdapter : uses
+BuildingBlockService --> Route : uses
 VervoerAdapter <|.. flightsAPI : implements
 
 ```
