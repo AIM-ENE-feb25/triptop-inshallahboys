@@ -26,6 +26,7 @@ UserRepository:
 ## Volgorde
 Controller -> Service -> (Adapter -> API) -> Repo
 
+
 ## Opdelen
 - De IdentityProvider kan opgedeeld worden in een API en een Adapter. De API is de interface die de IdentityProvider implementeert. De Adapter is de klasse die de API implementeert en de gegevens van de IdentityProvider omzet naar de gegevens die de Service verwacht.
 - Service blijft service
