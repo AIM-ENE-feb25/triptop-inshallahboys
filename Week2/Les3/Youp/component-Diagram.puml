@@ -1,72 +1,79 @@
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-title Backend Component Diagram Triptop
+title Backend Component Diagram - Triptop
 
 Container_Boundary(backend, "Triptop Backend") {
 
-    ' Inloggen van reizigers
-    Component(loginController, "LoginController", "RESTController", "Handles login requests")
+    ' Payment systems
+    Component(paymentController, "PaymentController", "REST Controller", "Handles payment requests")
+    Component(paymentService, "PaymentService", "Service", "Handles payment logic")
+    Component(paymentAdapter, "PaymentAdapter", "Adapter", "Handles payment logic")
+
+    ' Login System
+    Component(loginController, "LoginController", "REST Controller", "Handles login requests")
     Component(loginService, "LoginService", "Service", "Handles login logic")
-    Component(userRepository, "UserRepository", "Spring JPA Repository", "Handles user data")
 
-
-
-    ' Alle bouwstenen bij elkaar
-    Component(tripController, "TripController", "RESTController", "Handles trip requests")
+    ' Trip Management
+    Component(tripController, "TripController", "REST Controller", "Handles trip requests")
     Component(tripService, "TripService", "Service", "Handles trip logic")
     Component(tripRepository, "TripRepository", "Spring JPA Repository", "Handles trip data")
 
+    ' Modular Components (Bouwstenen)
+    Component(bouwsteenController, "BouwsteenController", "REST Controller", "Handles bouwsteen requests")
+    Component(bouwsteenService, "BouwsteenService", "Service", "Handles bouwsteen logic")
+    Component(bouwsteenRepository, "BouwsteenRepository", "Spring JPA Repository", "Handles bouwsteen data")
 
-    ' 1 enkele bouwsteen
-    Component(bouwsteenController, "bouwsteenController", "RESTController", "Handles bouwsteen requests")
-    Component(bouwsteenService, "bouwsteenService", "Service", "Handles bouwsteen logic")
-    Component(bouwsteenRepository, "bouwsteenRepository", "Spring JPA Repository / Interface", "Handles bouwsteen data")
-    Component(tripAdvisorAdapter, "tripAdvisorAdapter", "Spring JPA Adapter", "Handles excursie data")
-    Component(bookingAPIAdapter, "bookingAPIAdapter", "Spring JPA Adapter", "Handles verblijf data")
-    Component(vervoerAdapter, "vervoerAdapter", "Spring JPA Adapter", "Handles vervoer data")
-
-
+    ' External API Adapters
+    Component(tripAdvisorAdapter, "TripAdvisorAdapter", "Adapter", "Handles excursions")
+    Component(bookingAPIAdapter, "BookingAPIAdapter", "Adapter", "Handles accommodations")
+    Component(vervoerAdapter, "VervoerAdapter", "Adapter", "Handles transportation")
 }
 
-' Webapplicatie
-Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
+' Frontend
+Container(webApp, "Triptop Web Application", "React.js", "User interface for travelers")
 
-' External systemen (API's) en Database
-ComponentDb(DB, "Database", "Database", "Stores all data")
-Component_Ext(identityProvider, "identityProvider", "", "API voor authenticatie")
-Component_Ext(bookingAPI, "Booking-API", "", "API voor boeken van trips via Booking.com")
-Component_Ext(tripAdvisor, "TripAdvisor-API", "", "API voor trips via tripAdvisor")
-Component_Ext(flightsAPI, "Flights-API", "", "API voor vluchten")
+' External Systems & Database
+ComponentDb(database, "Triptop Database", "? Database", "Stores all data")
+Component_Ext(identityProvider, "Identity Provider", "OAuth API", "Handles authentication")
+Component_Ext(bookingAPI, "Booking API", "External API", "Books trips via Booking.com")
+Component_Ext(tripAdvisor, "TripAdvisor API", "External API", "Provides excursion data")
+Component_Ext(flightsAPI, "Flights API", "External API", "Fetches flight details")
+Component_Ext(paypalAPI, "PayPal API", "External API", "Handles payments via PayPal")
 
+' Relationships
+Rel(webApp, loginController, "Sends authentication requests")
+Rel(webApp, tripController, "Sends trip-related requests")
+Rel(webApp, bouwsteenController, "Sends modular component data")
+Rel(webApp, paymentController, "Sends payment requests")
 
-Rel(webApp, bouwsteenController, "Stuurt data door")
-Rel(webApp, tripController, "Stuurt data door")
-Rel(webApp, loginController, "Stuurt data door")
+Rel(loginController, loginService, "Processes login")
+Rel(loginService, identityProvider, "Requests authentication token")
 
-Rel(loginController, loginService, "Stuurt data door")
-Rel(loginService, userRepository, "Stuurt verwerkte logica door")
-Rel(loginService, identityProvider, "Vraagt token op")
+Rel(tripController, tripService, "Processes trip data")
+Rel(tripService, tripRepository, "Stores/retrieves trip data")
+Rel(tripService, bouwsteenRepository, "Stores/retrieves modular data")
+Rel(tripService, loginService, "Checks authorization")
 
-Rel(tripController, tripService, "Stuurt data door")
-Rel(tripService, bouwsteenRepository, "Stuurt verwerkte logica door")
-Rel(tripService, tripRepository, "Stuurt verwerkte logica door")
+Rel(bouwsteenController, bouwsteenService, "Processes modular component data")
+Rel(bouwsteenService, bouwsteenRepository, "Stores/retrieves modular component data")
+Rel(bouwsteenService, loginService, "Checks authorization")
 
-Rel(bouwsteenController, bouwsteenService, "Stuurt data door")
-Rel(bouwsteenService, bouwsteenRepository, "Stuurt verwerkte logica door")
+Rel(bouwsteenService, tripAdvisorAdapter, "Fetches excursions")
+Rel(bouwsteenService, bookingAPIAdapter, "Fetches accommodations")
+Rel(bouwsteenService, vervoerAdapter, "Fetches transport data")
 
-Rel(bouwsteenRepository, tripAdvisorAdapter, "Soort bouwsteen van tripadvisor")
-Rel(bouwsteenRepository, bookingAPIAdapter, "Soort bouwsteen van booking.com")
-Rel(bouwsteenRepository, vervoerAdapter, "Soort bouwsteen van NS")
+Rel(tripRepository, database, "Reads/Writes trip data")
+Rel(bouwsteenRepository, database, "Reads/Writes modular data")
 
-Rel(tripRepository, DB, "Leest en schrijft")
-Rel(userRepository, DB, "Leest en schrijft")
-Rel(bouwsteenRepository, DB, "Leest en schrijft")
+Rel(tripAdvisorAdapter, tripAdvisor, "Requests excursion data")
+Rel(bookingAPIAdapter, bookingAPI, "Requests accommodation data")
+Rel(vervoerAdapter, flightsAPI, "Requests flight details")
 
-Rel(tripAdvisorAdapter, tripAdvisor, "Vraagt excursies op")
-Rel(bookingAPIAdapter, bookingAPI, "Vraagt verblijven op")
-Rel(vervoerAdapter, flightsAPI, "Vraagt vervoer op")
-
-
+Rel(paymentController, paymentService, "Processes payment requests")
+Rel(paymentService, paymentAdapter, "Processes payment logic")
+Rel(paymentService, tripRepository, "Stores/retrieves payment data of trip")
+Rel(paymentService, loginService, "Checks authorization")
+Rel(paymentAdapter, paypalAPI, "Processes payments")
 
 @enduml
