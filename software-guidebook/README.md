@@ -66,7 +66,7 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 * Security -> Confidentiality (Degree to which a system, product or component ensures that data are accessible only to those authorized to have access)
 
 ## 5. Constraints
-Lars vindt dit stom.
+Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars zei niet doen for the record)
 
 ## 6. Principles
 
