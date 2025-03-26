@@ -93,11 +93,154 @@ Lars vindt dit stom.
 
 #### Frontend
 
+![component-frontend](diagrammen/componentdiagram/component-triptop-frontend.png)
 
 ###     7.3. Design & Code
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
+
+#### Hoe kunnen we verschillende identity providers met verschillende interfaces integreren voor het gehele systeem? (Chris)
+
+```mermaid
+classDiagram
+
+class User {
+    -id : int
+    -username : string
+    -password: string
+}
+
+class LoginController{
+    getToken(username, password)
+}
+
+class LoginService{
+    -user : User
+    +isAuth() : boolean
+    -getToken(username, password) : ResponseEntity<String>
+}
+
+class LoginAdapter{
+    <<interface>>
+    getToken(username, password)
+}
+
+class OAUTHLoginAdapter{
+    getToken(username, password)
+}
+
+
+class PaymentService {
+    Loginservice loginservice
+    +processPayment(provider: String, amount: double): boolean
+    -paymentRepository: PaymentRepository
+    -adapters: Map<String, PaymentAdapter>
+}
+
+class BuildingBlockService {
+    loginService: LoginService
+    + saveBuildingBlock(Integer): void
+}
+
+LoginController --> LoginService : sends data
+LoginService --> LoginAdapter : sends data to adapter
+LoginAdapter ..> OAUTHLoginAdapter : gets token from API
+PaymentService --> LoginService : checks for auth
+BuildingBlockService --> LoginService : checks for auth
+User --> LoginService : uses
+
+```
+
+
+
+#### Hoe kunnen we verschillende betalingssystemen integreren voor de verschillende bouwstenen? (Sacha)
+
+```mermaid
+classDiagram
+    class PaymentController {
+        +processPayment(provider: String, amount: double): ResponseEntity<String>
+    }
+
+    class PaymentService {
+        +processPayment(provider: String, amount: double): boolean
+        -paymentRepository: PaymentRepository
+        -adapters: Map<String, PaymentAdapter>
+    }
+
+    class PaymentAdapter {
+        <<interface>>
+        +processPayment(amount: double): boolean
+    }
+
+    class TripadvisorAdapter {
+        +processPayment(amount: double): boolean
+    }
+
+    class BookingAPIAdapter {
+        +processPayment(amount: double): boolean
+    }
+
+    class VervoerAdapter {
+        +processPayment(amount: double): boolean
+    }
+
+    class PaymentRepository {
+        +saveTransaction(transactionId: String, provider: String, amount: double, status: String): void
+        +getTransactionStatus(transactionId: String): String
+    }
+
+    %% Relaties tussen de klassen
+    PaymentController --> PaymentService : gebruikt
+    PaymentService --> PaymentAdapter : gebruikt
+    PaymentService --> PaymentRepository : gebruikt
+    PaymentAdapter <|.. TripadvisorAdapter : implementatie
+    PaymentAdapter <|.. BookingAPIAdapter : implementatie
+    PaymentAdapter <|.. VervoerAdapter : implementatie
+```
+
+#### Hoe kunnen we verschillende externe vervoersservices (zoals Google Maps of een veerdienst API) integreren zonder afhankelijk te worden van hun specifieke implementaties? (Youp)
+
+```mermaid
+classDiagram
+
+class BuildingBlockController {
+    + saveBuildingBlock(Integer): ResponseEntity<Integer>
+}
+
+class BuildingBlockService {
+    loginService: LoginService
+    + saveBuildingBlock(Integer): void
+}
+
+class LoginService{
+    +isAuth() : boolean
+    -getToken(username, password) : ResponseEntity<String>
+}
+
+class Route {
+    - locationStart: String
+    - locationEnd: String
+    - id: Integer
+    - type: String
+}
+
+class VervoerAdapter {
+    <<interface>>
+    + getRoute(String start, String end, Integer id): Route
+}
+
+class flightsAPI{
+    + getRoute(Location start, Location end, Integer): Route
+}
+
+BuildingBlockController --> BuildingBlockService : uses
+BuildingBlockService --> LoginService : checks if user is auth
+BuildingBlockService --> VervoerAdapter : uses
+BuildingBlockService --> Route : uses
+VervoerAdapter <|.. flightsAPI : implements
+```
+
 
 ## 8. Architectural Decision Records
 
