@@ -44,6 +44,6 @@ LoginService --> LoginAdapter : sends data to adapter
 LoginAdapter ..> OAUTHLoginAdapter : gets token from API
 PaymentService --> LoginService : checks for auth
 BuildingBlockService --> LoginService : checks for auth
-User --> LoginService
+User --> LoginService : uses
 
 ```
