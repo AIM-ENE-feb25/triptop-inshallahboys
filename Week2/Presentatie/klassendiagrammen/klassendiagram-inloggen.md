@@ -1,11 +1,18 @@
 ```mermaid
 classDiagram
 
+class User {
+    -id : int
+    -username : string
+    -password: string
+}
+
 class LoginController{
     getToken(username, password)
 }
 
 class LoginService{
+    -user : User
     +isAuth() : boolean
     -getToken(username, password) : ResponseEntity<String>
 }
@@ -37,5 +44,6 @@ LoginService --> LoginAdapter : sends data to adapter
 LoginAdapter ..> OAUTHLoginAdapter : gets token from API
 PaymentService --> LoginService : checks for auth
 BuildingBlockService --> LoginService : checks for auth
+User --> LoginService
 
 ```
