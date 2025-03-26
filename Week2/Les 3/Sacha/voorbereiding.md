@@ -72,9 +72,9 @@ classDiagram
     }
 
     %% Relaties tussen de klassen
-    PaymentController --> PaymentService : gebruikt
-    PaymentService --> PaymentAdapter : gebruikt
-    PaymentService --> TripRepository : gebruikt
-    PaymentAdapter <|.. PayPalApi : implementatie
+    PaymentController --> PaymentService : uses
+    PaymentService --> PaymentAdapter : uses
+    PaymentService --> TripRepository : uses
+    PaymentAdapter <|.. PayPalApi : implementation
 
 ```
