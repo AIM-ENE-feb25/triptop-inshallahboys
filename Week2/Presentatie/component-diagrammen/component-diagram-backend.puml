@@ -73,6 +73,7 @@ Rel(vervoerAdapter, flightsAPI, "Requests flight details")
 Rel(paymentController, paymentService, "Processes payment requests")
 Rel(paymentService, paymentAdapter, "Processes payment logic")
 Rel(paymentService, tripRepository, "Stores/retrieves payment data of trip")
+Rel(paymentService, loginService, "Checks authorization")
 Rel(paymentAdapter, paypalAPI, "Processes payments")
 
 @enduml
