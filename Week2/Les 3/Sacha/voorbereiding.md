@@ -51,6 +51,7 @@ classDiagram
     }
 
     class PaymentService {
+        Payment Payment
          LoginService loginService
         +processPayment(provider: String, amount: double): boolean
         -paymentRepository: PaymentRepository
@@ -79,11 +80,18 @@ classDiagram
         +getTransactionStatus(transactionId: String): String
     }
 
+    class Payment{
+        +int id
+        +boolean Completed
+
+    }
+    
+
     %% Relaties tussen de klassen
     PaymentController --> PaymentService : uses
     PaymentService --> PaymentAdapter : uses
     PaymentService --> TripRepository : uses
     PaymentAdapter <|.. PayPalApi : implementation
     PaymentService --> LoginService : checks for Auth
-
+    PaymentService --> Payment : uses
 ```
