@@ -51,10 +51,18 @@ classDiagram
     }
 
     class PaymentService {
+         LoginService loginService
         +processPayment(provider: String, amount: double): boolean
         -paymentRepository: PaymentRepository
         -adapters: Map<String, PaymentAdapter>
     }
+
+    class LoginService{
+    +isAuth() : boolean
+    -getToken(username, password) : ResponseEntity<String>
+    }
+ 
+ 
 
     class PaymentAdapter {
         <<interface>>
@@ -76,5 +84,6 @@ classDiagram
     PaymentService --> PaymentAdapter : uses
     PaymentService --> TripRepository : uses
     PaymentAdapter <|.. PayPalApi : implementation
+    PaymentService --> LoginService : checks for Auth
 
 ```
