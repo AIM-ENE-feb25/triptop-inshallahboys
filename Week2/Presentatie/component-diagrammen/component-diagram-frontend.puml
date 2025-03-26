@@ -1,1 +1,40 @@
-gang
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Frontend Component Diagram - Triptop
+
+Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
+Person(reiziger, "Reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
+
+Container_Boundary(backend, "Triptop Frontend") {
+    Component(app, App, "Main application component")
+    Component(root, Root, "Root component")
+    Component(nav, Nav, "Navigation bar for site navigation")
+    Component(header, Header, "Header section of the site")
+    Component(footer, Footer, "Footer section of the site")
+    Component(loginForm, LoginForm, "Form for user login")
+    Component(map, Map, "Displays map for trip locations")
+    Component(filter, Filter, "Filters trips based on criteria")
+    Component(paymentForm, PaymentForm, "Form for processing payments")
+    Component(tripOverview, TripOverview, "Overview of trips")
+    Component(buildingBlockOverview, BuildingBlockOverview, "Overview of building blocks")
+    Component(searchBar, SearchBar, "Search bar for finding trips")
+    Component(dashboard, Dashboard, "Dashboard for managing trips")
+}
+
+Rel(reiziger, root, "Annuleert, past aan en betaalt de reis")
+Rel(reisAgent, root, "Helpt reizigers met reis plannen")
+Rel(root, header, "Contains")
+Rel(root, nav, "Contains")
+Rel(root, footer, "Contains")
+Rel(root, app, "Contains")
+Rel(app, loginForm, "Contains")
+Rel(app, paymentForm, "Contains")
+Rel(app, dashboard, "Contains")
+Rel(dashboard, map, "Contains")
+Rel(nav, searchBar, "Contains")
+Rel(dashboard, buildingBlockOverview, "Contains")
+Rel(dashboard, filter, "Contains")
+Rel(dashboard, tripOverview, "Contains")
+
+@enduml
