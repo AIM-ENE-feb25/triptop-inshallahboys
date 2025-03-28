@@ -75,14 +75,23 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 
 ## 7. Software Architecture
 
-###     7.1. Containers
+###     7.1. Context
+
+> [!IMPORTANT]
+> Voeg toe: Deze moesten we zelf toevoegen :)
+
+![contextdiagram](diagrammen/contextdiagram/context-triptop.png)
+
+
+###     7.2. Containers
 
 > [!IMPORTANT]
 > Voeg toe: Container Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
-![contextdiagram](diagrammen/contextdiagram/context-triptop.png)
 
-###     7.2. Components
+
+
+###     7.3. Components
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -95,7 +104,7 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 
 ![component-frontend](diagrammen/componentdiagram/component-triptop-frontend.png)
 
-###     7.3. Design & Code
+###     7.4. Design & Code
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
