@@ -88,7 +88,7 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 > [!IMPORTANT]
 > Voeg toe: Container Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
-
+![containerdiagram](diagrammen/containerdiagram/containerdiagram.png)
 
 
 ###     7.3. Components
