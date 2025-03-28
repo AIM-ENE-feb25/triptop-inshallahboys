@@ -119,6 +119,7 @@ class LoginService{
     -user : User
     +isAuth() : boolean
     -getToken(username, password) : ResponseEntity<String>
+    +checkForAcces(String username, String application, String token) : boolean
 }
 
 class LoginAdapter{
@@ -163,6 +164,7 @@ classDiagram
     }
 
     class PaymentService {
+        LoginService loginService
         +processPayment(provider: String, amount: double): boolean
         -paymentRepository: PaymentRepository
         -adapters: Map<String, PaymentAdapter>
@@ -182,6 +184,13 @@ classDiagram
         +processPayment(amount: double): boolean
     }
 
+    class LoginService{
+    -user : User
+    +isAuth() : boolean
+    -getToken(username, password) : ResponseEntity<String>
+    +checkForAcces(String username, String application, String token) : boolean
+    }
+
     class TripRepository {
         +saveTransaction(transactionId: String, provider: String, amount: double, status: String): void
         +getTransactionStatus(transactionId: String): String
@@ -193,6 +202,7 @@ classDiagram
     PaymentService --> TripRepository : gebruikt
     PaymentAdapter <|.. PayPalApi : implementatie
     PaymentAdapter <|.. StripeApi : implementatie
+    PaymentService --> LoginService : checks for auth
 
 ```
 
@@ -211,8 +221,10 @@ class BuildingBlockService {
 }
 
 class LoginService{
+    -user : User
     +isAuth() : boolean
     -getToken(username, password) : ResponseEntity<String>
+    +checkForAcces(String username, String application, String token) : boolean
 }
 
 class Route {
