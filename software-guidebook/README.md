@@ -267,20 +267,31 @@ VervoerAdapter <|.. flightsAPI : implements
 > [!IMPORTANT]
 > Voeg toe: 3 tot 5 ADR's die beslissingen beschrijven die zijn genomen tijdens het ontwerpen en bouwen van de software.
 
-### 8.1. ADR-001 TITLE
-
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+### 8.1. Airbnb API
 
 #### Context 
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief overnachtingen. Dit betekent dat we betrouwbare en actuele gegevens over hotels, appartementen en andere accommodaties nodig hebben.
+
+| Class::Attribuut         | Is input voor API+Endpoint       | Wordt gevuld door API+Endpoint   | Wordt geleverd door eindgebruiker | Moet worden opgeslagen in de applicatie |
+| ------------------------ | -------------------------------- | -------------------------------- | --------------------------------- | --------------------------------------- |
+| Accommodatie::location   | Airbnb /search Property by place |                                  | x                                 | x                                       |
+| Accommodatie::currency   | Airbnb /search Property by place |                                  | x                                 |                                         |
+| Accommodatie::adults     | Airbnb /search Property by place |                                  | x                                 | x                                       |
+| Accommodatie::children   | Airbnb /search Property by place |                                  | x                                 | x                                       |
+| Accommodatie::checkin    | Airbnb /search Property by place |                                  | x                                 | x                                       |
+| Accommodatie::checkout   | Airbnb /search Property by place |                                  | x                                 | x                                       |
+| Accommodatie::priceMin   | Airbnb /search Property by place |                                  | x                                 |                                         |
+| Accommodatie::priceMax   | Airbnb /search Property by place |                                  | x                                 |                                         |
+| Accommodatie::starRating |                                  | Airbnb /search Property by place |                                   |                                         |
+| Accommodatie::price      |                                  | Airbnb /search Property by place |                                   | x                                       |
+| Accommodatie::images     |                                  | Airbnb /search Property by place |                                   |                                         |
+| Accommodatie::title      |                                  | Airbnb /search Property by place |                                   | x                                       |
+
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+Frontend en Backend
 
 #### Decision
 
@@ -289,133 +300,163 @@ VervoerAdapter <|.. flightsAPI : implements
 
 #### Status 
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Pending
 
 #### Consequences 
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
 
-### 8.2. ADR-002 TITLE
-
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+### 8.2. Design Patterns
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Voor de casusopdracht is er behoefte aan een flexibele integratie van verschillende betalingssystemen binnen de architectuur. De applicatie moet betalingen kunnen verwerken via meerdere externe providers, zoals Tripadvisor, Booking.com en diverse vervoersdiensten.
+Elke provider heeft zijn eigen API met unieke implementatiedetails, wat kan leiden tot complexe en inconsistente integraties. Het is essentieel om een generieke manier te bieden om met deze verschillende systemen te communiceren zonder de kernlogica van de applicatie onnodig complex te maken.
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+Om de integratie van de verschillende betalingssystemen te standaardiseren en te vereenvoudigen, hebben we het Adapter Pattern toegepast. Dit patroon maakt het mogelijk om de verschillende externe API's te laten voldoen aan een uniforme interface binnen de applicatie.
+
+We introduceren een PaymentAdapter-interface, die door specifieke adapters wordt geïmplementeerd voor elke externe betalingsprovider, zoals TripadvisorAdapter, BookingAPIAdapter en VervoerAdapter. De PaymentService zal enkel met de PaymentAdapter-interface werken en niet direct met de externe API’s, waardoor de afhankelijkheden worden geminimaliseerd en uitbreidingen eenvoudiger worden.
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+### Voordelen:
 
-### 8.3. ADR-003 TITLE
+- Losse koppeling: De kern van de applicatie hoeft geen kennis te hebben van de specifieke implementaties van externe betalingsproviders.
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+- Makkelijk uitbreidbaar: Nieuwe betalingssystemen kunnen eenvoudig worden toegevoegd door een nieuwe adapter te implementeren.
+
+- Ondersteuning voor meerdere betalingsproviders: Elke adapter kan de specifieke API-aanroepen van een externe provider afhandelen zonder de businesslogica aan te passen.
+
+### Nadelen:
+
+- Onderhoud van adapters: Wanneer een externe API verandert, moet de bijbehorende adapter mogelijk worden bijgewerkt.
+
+### 8.3. Overnachtingen - API
+
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief overnachtingen. Dit betekent dat we betrouwbare en actuele gegevens over hotels, appartementen en andere accommodaties nodig hebben.
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+Waarom deze criteria:
+1. **Grootte van het aanbod**: Hoe meer accommodaties, hoe beter de keuze voor gebruikers.
+2. **Real-time prijsupdates**: Actuele prijzen zorgen voor betrouwbare informatie.
+3. **Integratiegemak**: Een goed gedocumenteerde API maakt snelle en gemakkelijke integratie mogelijk.
+4. **Betaalmogelijkheden**: Ingebouwde betalingen vereenvoudigen de gebruikerservaring.
+5. **Wereldwijde dekking**: Brede dekking maakt het platform geschikt voor internationale reizigers.
+
+| Factoren                   | Booking.com API               | Hotels.com API                                | Eigen database           |
+| -------------------------- | ----------------------------- | --------------------------------------------- | ------------------------ |
+| **Grootte van het aanbod** | Zeer uitgebreid               | Zeer uitgebreid                               | Beperkt tot eigen aanbod |
+| **Real-time prijsupdates** | Ja                            | Ja                                            | Nee                      |
+| **Integratiegemak**        | Goed gedocumenteerde REST API | Goed gedocumenteerde REST API                 | Hoge ontwikkelkosten     |
+| **Betaalmogelijkheden**    | Ingebouwd via Booking.com     | Ingebouwd via Hotels.com                      | ?                        |
+| **Wereldwijde dekking**    | Zeer uitgebreid wereldwijd    | Sterk, maar minder wereldwijd dan Booking.com | Beperkt tot eigen aanbod |
+### Bronnen
+- https://www.booking.com/content/about.html?aid=304142&label=gen173rf-1FCAEoggI46AdIM1gDaKkBiAEBmAExuAEXyAEP2AEB6AEB-AECiAIBogILY2hhdGdwdC5jb22oAgO4Arrh9L4GwAIB0gIkOTAwNTkyM2YtYTMyNS00NWNhLTlhYjItZTg3NzMwZTFlNTcz2AIF4AIB&sid=8beb52740f0dbc937b1f47f33aa90b54
+- https://nl.hotels.com/
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+We hebben ervoor gekozen om Booking.com te gebruiken over Hotels.com en eigen database.
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+We hebben dit onderzoek nog niet heel erg grondig uitgevoerd en hierdoor zijn er veel nadelen van booking.com die we simpel weg nog niet weten!
 
-### 8.4. ADR-004 TITLE
+### 8.4. Flights ADR
 
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief vlucht. Dit betekent dat we betrouwbare en actuele gegevens over vluchten nodig hebben.
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+Waarom deze criteria:
+1. **Data betrouwbaarheid en actualiteit**: Is de data betrouwbaar en actueel? Dus als een vlucht verandert verandert de api dan ook gelijk?
+2. **Prijs en toegankelijkheid**: Is de API zelf gratis en toegankelijk?
+3. **Integratiegemak**: Hoe makkelijk is het om te integreren in de applicatie?
+4. **Functionaliteit en beperkingen**: Sommige API’s bieden extra features zoals prijsvoorspellingen, filters op bagagekosten of CO₂-uitstoot. Wat voor functionaliteiten biedt de API?
+5. **Onderhoud**: Bestaat de API nog? Wordt hij onderhouden?
+
+| Factoren | Google flights-API | Flights-API |
+| --- | --- | --- |
+| Data betrouwbaarheid en actualiteit | Real-time vluchtinfo | Real-time vluchtinfo |
+| Prijs en toegankelijkheid | Gratis via RapidAPI | Gratis via website |
+| Integratiegemak | ++ | ++ |
+| Functionaliteit en beperkingen | Google flights focust zich op basisinfo | Data zoals prijzen beschikbaar naast vlucht info |
+| Onderhoud | Discontinued | Vervanger google flights |
+##### Bronnen
+- https://aviationstack.com/
+- https://www.flightapi.io/blog/google-flight-api-history-and-alternative/
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+We hebben ervoor gekozen om niet voor Google flights te gaan aangezien deze gediscontinued is. Daarom kiezen wij voor het aanbevolen alternatief flights-api.
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+Dit onderzoek kon grondiger naar andere alternatieven, hierdoor kan het zijn dat er een beter alternatief aanwezig is.
 
-### 8.5. ADR-005 TITLE
-
-> [!TIP]
-> These documents have names that are short noun phrases. For example, "ADR 1: Deployment on Ruby on Rails 3.0.10" or "ADR 9: LDAP for Multitenant Integration". The whole ADR should be one or two pages long. We will write each ADR as if it is a conversation with a future developer. This requires good writing style, with full sentences organized into paragraphs. Bullets are acceptable only for visual style, not as an excuse for writing sentence fragments. (Bullets kill people, even PowerPoint bullets.)
+### 8.5. Tripadvisor - API
 
 #### Context
 
-> [!TIP]
-> This section describes the forces at play, including technological, political, social, and project local. These forces are probably in tension, and should be called out as such. The language in this section is value-neutral. It is simply describing facts about the problem we're facing and points out factors to take into account or to weigh when making the final decision.
+Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief activiteiten. Dit betekent dat we betrouwbare en actuele gegevens over tours, bezienswaardigheden en andere ervaringen nodig hebben.
 
 #### Considered Options
 
-> [!TIP]
-> This section describes the options that were considered, and gives some indication as to why the chosen option was selected.
+##### Waarom deze criteria:
+- **Diversiteit van activiteiten:** Een breed scala aan ervaringen maakt het platform aantrekkelijker.
+- **Real-time beschikbaarheid:** Actuele informatie over beschikbare tours en activiteiten voorkomt teleurstelling.
+- **Integratiegemak:** Een goed gedocumenteerde API maakt snelle en gemakkelijke integratie mogelijk.
+- **Gebruikersbeoordelingen:** Ingebouwde reviews helpen gebruikers bij hun keuze.
+- **Wereldwijde dekking:** Brede dekking maakt het platform geschikt voor internationale reizigers.
+
+##### Vergelijking van opties
+
+| Factoren                | Tripadvisor API         | Expedia API         | Eigen database          |
+|------------------------|------------------------|---------------------|------------------------|
+| **Diversiteit van activiteiten** | Zeer uitgebreid        | Zeer uitgebreid     | Beperkt tot eigen aanbod |
+| **Real-time beschikbaarheid** | Ja                     | Ja                  | Nee                    |
+| **Integratiegemak**        | Goed gedocumenteerde REST API | Goed gedocumenteerde REST API | Hoge ontwikkelkosten |
+| **Gebruikersbeoordelingen**   | Ja, via Tripadvisor-platform | Ja, via Expedia-platform | Afhankelijk van eigen implementatie |
+| **Wereldwijde dekking**   | Uitgebreid wereldwijd  | Uitgebreid wereldwijd | Beperkt tot eigen aanbod |
+
+##### Bronnen
+- [Tripadvisor](https://www.tripadvisor.com/)
+- [Expedia Developer](https://developer.expediagroup.com/)
 
 #### Decision
 
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+We hebben ervoor gekozen om **Expedia** te gebruiken over **Tripadvisor** en een eigen database.
 
 #### Status
 
-> [!TIP]
-> A decision may be "proposed" if the project stakeholders haven't agreed with it yet, or "accepted" once it is agreed. If a later ADR changes or reverses a decision, it may be marked as "deprecated" or "superseded" with a reference to its replacement.
+Accepted
 
 #### Consequences
 
-> [!TIP]
-> This section describes the resulting context, after applying the decision. All consequences should be listed here, not just the "positive" ones. A particular decision may have positive, negative, and neutral consequences, but all of them affect the team and project in the future.
+Dit onderzoek is nog niet volledig onderzocht en er zijn nog veel onbekende nadelen van Expedia die we nog niet weten!
 
 ## 9. Deployment, Operation and Support
 
