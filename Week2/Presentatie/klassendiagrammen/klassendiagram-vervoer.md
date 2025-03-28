@@ -2,12 +2,12 @@
 classDiagram
 
 class BuildingBlockController {
-    + saveBuildingBlock(Integer): ResponseEntity<Integer>
+    + saveBuildingBlock(Integer id, String start, String end): ResponseEntity<Integer, String>
 }
 
 class BuildingBlockService {
     loginService: LoginService
-    + saveBuildingBlock(Integer): void
+    + saveBuildingBlock(Integer id, String start, String end): void
 }
 
 class LoginService{
@@ -22,18 +22,28 @@ class Route {
     - type: String
 }
 
-class VervoerAdapter {
+class TravelAdapter {
     <<interface>>
     + getRoute(String start, String end, Integer id): Route
 }
 
-class flightsAPI{
+class flightsAPI {
     + getRoute(Location start, Location end, Integer): Route
+}
+
+class NSAdapter {
+    + getRoute(String start, String end, Integer id): Route
+}
+
+class CarBooksAdapter {
+    + getRoute(String start, String end, Integer id): Route
 }
 
 BuildingBlockController --> BuildingBlockService : uses
 BuildingBlockService --> LoginService : checks if user is auth
-BuildingBlockService --> VervoerAdapter : uses
+BuildingBlockService --> TravelAdapter : uses
 BuildingBlockService --> Route : uses
-VervoerAdapter <|.. flightsAPI : implements
+TravelAdapter <|.. flightsAPI : implements
+TravelAdapter <|.. NSAdapter : implements
+TravelAdapter <|.. CarBooksAdapter : implements
 ```
