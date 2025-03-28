@@ -164,7 +164,6 @@ classDiagram
     }
 
     class PaymentService {
-        LoginService loginService
         +processPayment(provider: String, amount: double): boolean
         -paymentRepository: PaymentRepository
         -adapters: Map<String, PaymentAdapter>
@@ -175,35 +174,38 @@ classDiagram
         +processPayment(amount: double): boolean
     }
 
-    class PayPalApi{
-        +processPayment(amount: double): boolean
-        
-    }
-    
-    class StripeApi{
+    class TripadvisorAdapter {
         +processPayment(amount: double): boolean
     }
 
-    class LoginService{
-    -user : User
-    +isAuth() : boolean
-    -getToken(username, password) : ResponseEntity<String>
-    +checkForAcces(String username, String application, String token) : boolean
+    class BookingAPIAdapter {
+        +processPayment(amount: double): boolean
     }
 
-    class TripRepository {
+    class TransportAdapter {
+        +processPayment(amount: double): boolean
+    }
+
+    class PaymentRepository {
         +saveTransaction(transactionId: String, provider: String, amount: double, status: String): void
         +getTransactionStatus(transactionId: String): String
     }
 
-    %% Relaties tussen de klassen
-    PaymentController --> PaymentService : gebruikt
-    PaymentService --> PaymentAdapter : gebruikt
-    PaymentService --> TripRepository : gebruikt
-    PaymentAdapter <|.. PayPalApi : implementatie
-    PaymentAdapter <|.. StripeApi : implementatie
-    PaymentService --> LoginService : checks for auth
+    class LoginService{
+        -user : User
+        +isAuth() : boolean
+        -getToken(username, password) : ResponseEntity<String>
+        +checkForAcces(String username, String application, String token) : boolean
+    }
 
+    %% Relaties tussen de klassen
+    PaymentController --> PaymentService : uses
+    PaymentService --> PaymentAdapter : uses
+    PaymentService --> PaymentRepository : uses
+    PaymentAdapter <|.. TripadvisorAdapter : implements
+    PaymentAdapter <|.. BookingAPIAdapter : implements
+    PaymentAdapter <|.. VervoerAdapter : implements
+    PaymentService --> LoginService : checks for auth
 ```
 
 #### Hoe kunnen we verschillende externe vervoersservices (zoals Google Maps of een veerdienst API) integreren zonder afhankelijk te worden van hun specifieke implementaties? (Youp)
@@ -244,7 +246,7 @@ class flightsAPI{
 }
 
 BuildingBlockController --> BuildingBlockService : uses
-BuildingBlockService --> LoginService : checks if user is auth
+BuildingBlockService --> LoginService : checks for auth
 BuildingBlockService --> VervoerAdapter : uses
 BuildingBlockService --> Route : uses
 VervoerAdapter <|.. flightsAPI : implements

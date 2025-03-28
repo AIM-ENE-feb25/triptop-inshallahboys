@@ -23,7 +23,7 @@ classDiagram
         +processPayment(amount: double): boolean
     }
 
-    class VervoerAdapter {
+    class TransportAdapter {
         +processPayment(amount: double): boolean
     }
 
@@ -33,10 +33,10 @@ classDiagram
     }
 
     %% Relaties tussen de klassen
-    PaymentController --> PaymentService : gebruikt
-    PaymentService --> PaymentAdapter : gebruikt
-    PaymentService --> PaymentRepository : gebruikt
-    PaymentAdapter <|.. TripadvisorAdapter : implementatie
-    PaymentAdapter <|.. BookingAPIAdapter : implementatie
-    PaymentAdapter <|.. VervoerAdapter : implementatie
+    PaymentController --> PaymentService : uses
+    PaymentService --> PaymentAdapter : uses
+    PaymentService --> PaymentRepository : uses
+    PaymentAdapter <|.. TripadvisorAdapter : implements
+    PaymentAdapter <|.. BookingAPIAdapter : implements
+    PaymentAdapter <|.. VervoerAdapter : implements
 ```
