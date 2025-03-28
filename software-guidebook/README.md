@@ -12,6 +12,9 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 > [!IMPORTANT]
 > Werk zelf dit hoofdstuk uit met context diagrammen en een beschrijving van de context van de software.
 
+![contextdiagram](diagrammen/contextdiagram/context-triptop.png)
+
+
 Toelichting op de context van de software inclusief System Context Diagram:
 * Functionaliteit
 * Gebruikers
@@ -75,15 +78,7 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 
 ## 7. Software Architecture
 
-###     7.1. Context
-
-> [!IMPORTANT]
-> Voeg toe: Deze moesten we zelf toevoegen :)
-
-![contextdiagram](diagrammen/contextdiagram/context-triptop.png)
-
-
-###     7.2. Containers
+###     7.1. Containers
 
 > [!IMPORTANT]
 > Voeg toe: Container Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -91,7 +86,7 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 ![containerdiagram](diagrammen/containerdiagram/containerdiagram.png)
 
 
-###     7.3. Components
+###     7.2. Components
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -104,7 +99,7 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 
 ![component-frontend](diagrammen/componentdiagram/component-triptop-frontend.png)
 
-###     7.4. Design & Code
+###     7.3. Design & Code
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
