@@ -21,6 +21,11 @@ Container_Boundary(backend, "Triptop Frontend") {
     Component(searchBar, SearchBar, "Search bar for finding trips")
     Component(dashboard, Dashboard, "Dashboard for managing trips")
 }
+    System_Ext(bookingAPI, "Booking API", "API for booking trips via Booking.com")
+    System_Ext(tripAdvisor, "TripAdvisor API", "API for booking trips via TripAdvisor")
+    System_Ext(airbnb, "Airbnb API", "API for booking accommodations via Airbnb")
+
+
 
 Rel(reiziger, root, "Annuleert, past aan en betaalt de reis")
 Rel(reisAgent, root, "Helpt reizigers met reis plannen")
@@ -36,5 +41,8 @@ Rel(nav, searchBar, "Contains")
 Rel(dashboard, buildingBlockOverview, "Contains")
 Rel(dashboard, filter, "Contains")
 Rel(dashboard, tripOverview, "Contains")
+Rel(dashboard, bookingAPI, "Makes API requests to")
+Rel(dashboard, tripAdvisor, "Makes API requests to")
+Rel(dashboard, airbnb, "Makes API requests to")
 
 @enduml

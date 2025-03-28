@@ -3,49 +3,52 @@
 
 SHOW_PERSON_OUTLINE()
 
-'Actoren
-Person(reisAgent, "Reis Agent", "Helpt reizigers met reis plannen")
-Person(reiziger, "reiziger", "Kan reis boeken, annuleren, aanpassen en betalen")
+'Actors
+Person(travelAgent, "Travel Agent", "Helps travelers plan their trips")
+Person(traveler, "Traveler", "Can book, cancel, modify, and pay for trips")
 
-'Containers binnen het systeem
+'Containers within the system
 System_Boundary(c4, "Triptrop") {
-    Container(webApp, "Web applicatie", "React.js", "Gebruikersinterface voor reizigers")
-    Container(adminApp, "Admin applicatie?", "?", "Gebruikersinterface voor reis agenten?")
-    Container(backend, "Backend", "Java", "Verwerkt alle logica")
-    Container(DB, "Database", "?", "Opslaan van data")
+    Container(webApp, "Web Application", "React.js", "User interface for travelers")
+    Container(adminApp, "Admin Application?", "?", "User interface for travel agents?")
+    Container(backend, "Backend", "Java", "Processes all logic")
+    Container(DB, "Database", "?", "Stores data")
 }
 
-'API's
-System_Ext(wireMock, "WireMock", "API voor webapplicatie")
-System_Ext(bookingAPI, "Booking-API", "API voor boeken van reizen via Booking.com")
-System_Ext(tripAdvisor, "TripAdvisor-API", "API voor boeken van reizen via TripAdvisor")
-System_Ext(uberEats, "UberEats-API", "API voor het bestellen van eten via UberEats")
-System_Ext(googleFlights, "Google flights-API", "API van het boeken van vluchten via Google Flights")
-System_Ext(cheapFlights, Cheap flights-API"", "API voor het boeken van vluchten via Cheap Flights")
-System_Ext(airbnb, "Airbnb-API", "API voor het boeken van accomodaties via Airbnb")
-System_Ext(smsGateway, "Sms gateway-API", "API voor het verzenden van sms-berichten")
-System_Ext(emailVerifier, "Email verifier-API", "API voor het verifiëren van e-mailadressen")
-System_Ext(veriphone, "Veriphone-API", "API voor het verifiëren van telefoonnummers")
+'APIs
+System_Ext(wireMock, "WireMock", "API for web application testing")
+System_Ext(bookingAPI, "Booking API", "API for booking trips via Booking.com")
+System_Ext(tripAdvisor, "TripAdvisor API", "API for booking trips via TripAdvisor")
+System_Ext(airbnb, "Airbnb API", "API for booking accommodations via Airbnb")
+System_Ext(smsGateway, "SMS Gateway API", "API for sending SMS messages")
+System_Ext(emailVerifier, "Email Verifier API", "API for verifying email addresses")
+System_Ext(veriphone, "Veriphone API", "API for verifying phone numbers")
+System_Ext(PayPal, "PayPal API", "API for processing payments via PayPal")
+System_Ext(Stripe, "Stripe API", "API for processing payments via Stripe")
+System_Ext(NS, "NS API", "API for booking train journeys via NS")
+System_Ext(CarBooks, "CarBooks API", "API for booking car rentals via CarBooks")
 
-'Relaties
-Rel(reisAgent, adminApp, "Gebruikt", "HTTP")
-Rel(webApp, backend, "Stuurt data door", "HTTP")
-Rel(adminApp, backend, "Stuurt data door", "HTTP")
-Rel(reiziger, webApp, "Boekt, annuleert, past aan en betaalt de reis")
-Rel(reisAgent, webApp, "Helpt reizigers met reis plannen")
 
-Rel(backend, wireMock, "Mockt API's voor testen")
-Rel(webApp, bookingAPI, "Maakt API-verzoeken naar")
-Rel(webApp, tripAdvisor, "Maakt API-verzoeken naar")
-Rel(webApp, uberEats, "Maakt API-verzoeken naar")
-Rel(webApp, googleFlights, "Maakt API-verzoeken naar")
-Rel(webApp, cheapFlights, "Maakt API-verzoeken naar")
-Rel(webApp, airbnb, "Maakt API-verzoeken naar")
-Rel(backend, smsGateway, "Maakt API-verzoeken naar")
-Rel(backend, emailVerifier, "Maakt API-verzoeken naar")
-Rel(backend, veriphone, "Maakt API-verzoeken naar")
+'Relationships
+Rel(travelAgent, adminApp, "Uses", "HTTP")
+Rel(webApp, backend, "Sends data to", "HTTP")
+Rel(adminApp, backend, "Sends data to", "HTTP")
+Rel(traveler, webApp, "Books, cancels, modifies, and pays for trips")
+Rel(travelAgent, webApp, "Helps travelers plan their trips")
 
-Rel(backend, DB, "Leest en schrijft")
+Rel(backend, wireMock, "Mocks APIs for testing")
+Rel(webApp, bookingAPI, "Makes API requests to")
+Rel(webApp, tripAdvisor, "Makes API requests to")
+Rel(webApp, airbnb, "Makes API requests to")
+Rel(backend, smsGateway, "Makes API requests to")
+Rel(backend, emailVerifier, "Makes API requests to")
+Rel(backend, veriphone, "Makes API requests to")
+Rel(backend, PayPal, "Makes API requests to")
+Rel(backend, Stripe, "Makes API requests to")
+Rel(backend, NS, "Makes API requests to")
+Rel(backend, CarBooks, "Makes API requests to")
+
+Rel(backend, DB, "Reads and writes")
 
 
 @enduml

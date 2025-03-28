@@ -40,6 +40,10 @@ Component_Ext(bookingAPI, "Booking API", "External API", "Books trips via Bookin
 Component_Ext(tripAdvisor, "TripAdvisor API", "External API", "Provides excursion data")
 Component_Ext(flightsAPI, "Flights API", "External API", "Fetches flight details")
 Component_Ext(paypalAPI, "PayPal API", "External API", "Handles payments via PayPal")
+Component_Ext(stripeAPI, "Stripe API", "External API", "Handles payments via Stripe")
+Component_Ext(carBooksAPI, "CarBooks API", "External API", "Books car rentals")
+Component_Ext(nsAPI, "NS API", "External API", "Books train trips")
+
 
 ' Relationships
 Rel(webApp, loginController, "Sends authentication requests")
@@ -69,11 +73,15 @@ Rel(buildingBlockRepository, database, "Reads/Writes building block data")
 Rel(tripAdvisorAdapter, tripAdvisor, "Requests excursion data")
 Rel(bookingAPIAdapter, bookingAPI, "Requests accommodation data")
 Rel(transportAdapter, flightsAPI, "Requests flight details")
+Rel(transportAdapter, carBooksAPI, "Requests car rental data")
+Rel(transportAdapter, nsAPI, "Requests train trip data")
+
 
 Rel(paymentController, paymentService, "Processes payment requests")
 Rel(paymentService, paymentAdapter, "Processes payment logic")
 Rel(paymentService, tripRepository, "Stores/retrieves payment data of trip")
 Rel(paymentService, loginService, "Checks authorization")
 Rel(paymentAdapter, paypalAPI, "Processes payments")
+Rel(paymentAdapter, stripeAPI, "Processes payments")
 
 @enduml
