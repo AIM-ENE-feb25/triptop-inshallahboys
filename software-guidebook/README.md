@@ -129,10 +129,12 @@ class LoginService{
 class LoginAdapter{
     <<interface>>
     getToken(username, password)
+    checkForAcces(String username, String application, String token)
 }
 
-class OAUTHLoginAdapter{
+class WireMockAdapter{
     getToken(username, password)
+    checkForAcces(String username, String application, String token)
 }
 
 
@@ -150,7 +152,7 @@ class BuildingBlockService {
 
 LoginController --> LoginService : sends data
 LoginService --> LoginAdapter : sends data to adapter
-LoginAdapter ..> OAUTHLoginAdapter : gets token from API
+LoginAdapter ..> WireMockAdapter : implements
 PaymentService --> LoginService : checks for auth
 BuildingBlockService --> LoginService : checks for auth
 User --> LoginService : uses
@@ -208,7 +210,7 @@ classDiagram
     PaymentService --> PaymentRepository : uses
     PaymentAdapter <|.. TripadvisorAdapter : implements
     PaymentAdapter <|.. BookingAPIAdapter : implements
-    PaymentAdapter <|.. VervoerAdapter : implements
+    PaymentAdapter <|.. TransportAdapter : implements
     PaymentService --> LoginService : checks for auth
 ```
 
@@ -465,3 +467,11 @@ Dit onderzoek is nog niet volledig onderzocht en er zijn nog veel onbekende nade
 
 > [!TIP]
 > Zelf beschrijven van wat je moet doen om de software te installeren en te kunnen runnen.
+
+## Planning
+
+**Maandag**: Prototype.
+**Dinsdag**: Prototype.
+**Woensdag**: ADR uitkomsten bijwerken en checken op verschillen diagrammen.
+**Donderdag**: SGB Schrijven
+**Vrijdag**: SGB Bijwerken & Presentatie!
