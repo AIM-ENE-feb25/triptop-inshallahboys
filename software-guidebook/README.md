@@ -173,19 +173,16 @@ classDiagram
         +processPayment(amount: double): boolean
     }
 
-    class TripadvisorAdapter {
+    class PayPalApi{
+        +processPayment(amount: double): boolean
+        
+    }
+    
+    class StripeApi{
         +processPayment(amount: double): boolean
     }
 
-    class BookingAPIAdapter {
-        +processPayment(amount: double): boolean
-    }
-
-    class VervoerAdapter {
-        +processPayment(amount: double): boolean
-    }
-
-    class PaymentRepository {
+    class TripRepository {
         +saveTransaction(transactionId: String, provider: String, amount: double, status: String): void
         +getTransactionStatus(transactionId: String): String
     }
@@ -193,10 +190,10 @@ classDiagram
     %% Relaties tussen de klassen
     PaymentController --> PaymentService : gebruikt
     PaymentService --> PaymentAdapter : gebruikt
-    PaymentService --> PaymentRepository : gebruikt
-    PaymentAdapter <|.. TripadvisorAdapter : implementatie
-    PaymentAdapter <|.. BookingAPIAdapter : implementatie
-    PaymentAdapter <|.. VervoerAdapter : implementatie
+    PaymentService --> TripRepository : gebruikt
+    PaymentAdapter <|.. PayPalApi : implementatie
+    PaymentAdapter <|.. StripeApi : implementatie
+
 ```
 
 #### Hoe kunnen we verschillende externe vervoersservices (zoals Google Maps of een veerdienst API) integreren zonder afhankelijk te worden van hun specifieke implementaties? (Youp)

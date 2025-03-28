@@ -65,6 +65,10 @@ classDiagram
         +processPayment(amount: double): boolean
         
     }
+    
+    class StripeApi{
+        +processPayment(amount: double): boolean
+    }
 
     class TripRepository {
         +saveTransaction(transactionId: String, provider: String, amount: double, status: String): void
@@ -76,5 +80,6 @@ classDiagram
     PaymentService --> PaymentAdapter : gebruikt
     PaymentService --> TripRepository : gebruikt
     PaymentAdapter <|.. PayPalApi : implementatie
+    PaymentAdapter <|.. StripeApi : implementatie
 
 ```
