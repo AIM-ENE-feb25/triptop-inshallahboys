@@ -121,7 +121,6 @@ class LoginController{
 
 class LoginService{
     -user : User
-    +isAuth() : boolean
     -getToken(username, password) : ResponseEntity<String>
     +checkForAcces(String username, String application, String token) : boolean
 }
@@ -199,7 +198,6 @@ classDiagram
 
     class LoginService{
         -user : User
-        +isAuth() : boolean
         -getToken(username, password) : ResponseEntity<String>
         +checkForAcces(String username, String application, String token) : boolean
     }
@@ -229,8 +227,8 @@ class BuildingBlockService {
 }
 
 class LoginService{
-    +isAuth() : boolean
     -getToken(username, password) : ResponseEntity<String>
+    +checkForAcces(String username, String application, String token) : boolean
 }
 
 class Route {
