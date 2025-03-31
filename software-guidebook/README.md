@@ -1,11 +1,11 @@
 # Software Guidebook Triptop
 
 ## 1. Introduction
-Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat een samenvatting van het volgende: 
-1. De vereisten, beperkingen en principes. 
-1. De software-architectuur, met inbegrip van de technologiekeuzes op hoog niveau en de structuur van de software. 
+Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat een samenvatting van het volgende:
+1. De vereisten, beperkingen en principes.
+1. De software-architectuur, met inbegrip van de technologiekeuzes op hoog niveau en de structuur van de software.
 1. De ontwerp- en codebeslissingen die zijn genomen om de software te realiseren.
-1. De architectuur van de infrastructuur en hoe de software kan worden geinstalleerd. 
+1. De architectuur van de infrastructuur en hoe de software kan worden geinstalleerd.
 
 ## 2. Context
 
@@ -38,7 +38,7 @@ Als gebruiker wil ik een geplande reis als geheel of per variabele (bouwsteen) b
 
 Als gebruiker wil ik een geboekte reis, of delen daarvan, kunnen annuleren zodat ik mijn geld terug kan krijgen zonder inmenging van een intermediair zoals een reisbureau.
 
-#### 3.1.4 User Story 4: Reisstatus bewaren 
+#### 3.1.4 User Story 4: Reisstatus bewaren
 
 Als gebruiker wil ik mijn reisstatus kunnen bewaren zonder dat ik een extra account hoef aan te maken zodat ik mijn reis kan volgen zonder dat ik daarvoor extra handelingen moet verrichten.
 
@@ -272,7 +272,7 @@ TravelAdapter <|.. CarBooksAdapter : implements
 
 ### 8.1. Airbnb API
 
-#### Context 
+#### Context
 
 Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief overnachtingen. Dit betekent dat we betrouwbare en actuele gegevens over hotels, appartementen en andere accommodaties nodig hebben.
 
@@ -301,11 +301,11 @@ Frontend en Backend
 > [!TIP]
 > This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
 
-#### Status 
+#### Status
 
 Pending
 
-#### Consequences 
+#### Consequences
 
 
 ### 8.2. Design Patterns
