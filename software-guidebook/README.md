@@ -72,6 +72,7 @@ Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgend
 Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars zei niet doen for the record)
 
 ## 6. Principles
+Dependency Inversion Principle
 
 > [!IMPORTANT]
 > Beschrijf zelf de belangrijkste architecturele en design principes die zijn toegepast in de software.
@@ -180,15 +181,11 @@ classDiagram
         +processPayment(amount: double): boolean
     }
 
-    class TripadvisorAdapter {
+    class PaypalAdapter {
         +processPayment(amount: double): boolean
     }
 
-    class BookingAPIAdapter {
-        +processPayment(amount: double): boolean
-    }
-
-    class TransportAdapter {
+    class StripeAdapter {
         +processPayment(amount: double): boolean
     }
 
@@ -208,9 +205,8 @@ classDiagram
     PaymentController --> PaymentService : uses
     PaymentService --> PaymentAdapter : uses
     PaymentService --> PaymentRepository : uses
-    PaymentAdapter <|.. TripadvisorAdapter : implements
-    PaymentAdapter <|.. BookingAPIAdapter : implements
-    PaymentAdapter <|.. TransportAdapter : implements
+    PaymentAdapter <|.. PaypalAdapter : implements
+    PaymentAdapter <|.. StripeAdapter : implements
     PaymentService --> LoginService : checks for auth
 ```
 
@@ -229,8 +225,10 @@ class BuildingBlockService {
 }
 
 class LoginService{
+    -user : User
     +isAuth() : boolean
     -getToken(username, password) : ResponseEntity<String>
+    +checkForAcces(String username, String application, String token) : boolean
 }
 
 class Route {
@@ -272,27 +270,11 @@ TravelAdapter <|.. CarBooksAdapter : implements
 > [!IMPORTANT]
 > Voeg toe: 3 tot 5 ADR's die beslissingen beschrijven die zijn genomen tijdens het ontwerpen en bouwen van de software.
 
-### 8.1. Airbnb API
+### 8.1. NS API
 
 #### Context 
 
 Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief overnachtingen. Dit betekent dat we betrouwbare en actuele gegevens over hotels, appartementen en andere accommodaties nodig hebben.
-
-| Class::Attribuut         | Is input voor API+Endpoint       | Wordt gevuld door API+Endpoint   | Wordt geleverd door eindgebruiker | Moet worden opgeslagen in de applicatie |
-| ------------------------ | -------------------------------- | -------------------------------- | --------------------------------- | --------------------------------------- |
-| Accommodatie::location   | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::currency   | Airbnb /search Property by place |                                  | x                                 |                                         |
-| Accommodatie::adults     | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::children   | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::checkin    | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::checkout   | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::priceMin   | Airbnb /search Property by place |                                  | x                                 |                                         |
-| Accommodatie::priceMax   | Airbnb /search Property by place |                                  | x                                 |                                         |
-| Accommodatie::starRating |                                  | Airbnb /search Property by place |                                   |                                         |
-| Accommodatie::price      |                                  | Airbnb /search Property by place |                                   | x                                       |
-| Accommodatie::images     |                                  | Airbnb /search Property by place |                                   |                                         |
-| Accommodatie::title      |                                  | Airbnb /search Property by place |                                   | x                                       |
-
 
 #### Considered Options
 
