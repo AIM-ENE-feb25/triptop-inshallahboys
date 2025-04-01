@@ -1,6 +1,7 @@
 package com.inshallahboys.Triptop.service;
 
 import com.inshallahboys.Triptop.adapter.travel.TravelAdapter;
+import com.inshallahboys.Triptop.domain.User;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,9 +21,17 @@ public class BuildingBlockService {
     @Qualifier("drivingDirectionAdapter") // first letter cannot be capital
     private TravelAdapter drivingDirectionAdapter;
 
-    public String getTravelData(String locationStart, String locationEnd, String transportType) throws UnirestException {
+    public String getTravelData(String locationStart, String locationEnd, String transportType, User user) throws UnirestException {
+
+
+
         String result = "";
-        if(loginService.checkForAcces("hoi", "hoi")) {
+
+        String token = loginService.getToken(user.username(), user.password());
+
+
+
+        if(loginService.checkForAcces(user.username(), token)) {
             switch (transportType) {
                 case "TRAIN":
                     result = nsAdapter.getRoute(locationStart, locationEnd);

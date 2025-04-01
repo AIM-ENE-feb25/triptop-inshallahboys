@@ -24,6 +24,7 @@ public class LoginService {
 
     public boolean checkForAcces(String username, String token) throws UnirestException {
         boolean hasAccess = loginAdapter.checkForAcces(username, token);
+        System.out.println("has access in service: " + hasAccess);
         return hasAccess;
     }
 }

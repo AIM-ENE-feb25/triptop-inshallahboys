@@ -18,9 +18,9 @@ function App() {
         body: JSON.stringify({ username, password }),
       });
 
-      const token = (await response.text()).trim(); // Trim to avoid unexpected whitespace
+      const token = (await response.text()).trim();
 
-      if (token == "information was not correct") {
+      if (token == "informationwasnotcorrect") {
         alert("Information was not correct");
         return;
       }
