@@ -15,7 +15,7 @@ public class LoginService {
         return null;
     }
 
-    private boolean checkForAcces(String username, String application, String token){
+    public boolean checkForAcces(String username, String application, String token){
         System.out.println("access checked");
         return true;
     }

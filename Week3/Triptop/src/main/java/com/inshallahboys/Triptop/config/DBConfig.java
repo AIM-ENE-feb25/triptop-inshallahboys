@@ -15,8 +15,6 @@ public class DBConfig {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
                 .setName("user")
-                .addScript("classpath:db/Schema.sql")
-                .addScript("classpath:db/data.sql")
                 .build();
     }
 }
