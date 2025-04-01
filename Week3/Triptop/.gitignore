@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### dev properties ###
+/Week3/Triptop/src/main/resources/application-dev.properties
