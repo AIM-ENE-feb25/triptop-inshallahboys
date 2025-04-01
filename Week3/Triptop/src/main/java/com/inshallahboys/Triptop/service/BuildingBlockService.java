@@ -22,7 +22,7 @@ public class BuildingBlockService {
 
     public String getTravelData(String locationStart, String locationEnd, String transportType) throws UnirestException {
         String result = "";
-        if(loginService.checkForAcces("hoi", "hoi", "hoi")) {
+        if(loginService.checkForAcces("hoi", "hoi")) {
             switch (transportType) {
                 case "TRAIN":
                     result = nsAdapter.getRoute(locationStart, locationEnd);
