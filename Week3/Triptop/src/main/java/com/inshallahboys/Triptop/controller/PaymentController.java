@@ -3,7 +3,6 @@ package com.inshallahboys.Triptop.controller;
 import com.inshallahboys.Triptop.service.PaymentService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -16,8 +15,11 @@ public class PaymentController {
     }
 
     @PostMapping("/process")
-    public String processPayment(@RequestBody Map<String, String> request) {
-        String amount = request.get("amount");
-        return paymentService.processPayment(amount);
+    public String processPayment(
+            @RequestParam String amount,
+            @RequestParam(required = false, defaultValue = "paypal") String paymentType) {
+
+        return paymentService.processPayment(amount, paymentType);
     }
 }
+
