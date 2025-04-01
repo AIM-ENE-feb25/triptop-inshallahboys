@@ -1,4 +1,6 @@
 package com.inshallahboys.Triptop.domain;
 
-public class User {
-}
+public record User (
+        String username,
+        String password
+) {}
