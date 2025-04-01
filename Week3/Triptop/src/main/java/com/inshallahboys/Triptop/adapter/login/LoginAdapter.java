@@ -7,5 +7,5 @@ import org.springframework.stereotype.Component;
 public interface LoginAdapter {
     String getToken(String username, String password) throws UnirestException;
 
-    boolean checkForAcces(String username, String application, String token);
+    boolean checkForAcces(String username, String token) throws UnirestException;
 }

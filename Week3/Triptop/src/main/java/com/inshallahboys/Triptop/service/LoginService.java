@@ -13,18 +13,17 @@ public class LoginService {
     @Autowired
     @Qualifier("wireMockAdapter") // Geen idee waarom dit een kleine letter moet zien, maar inshallah
     private LoginAdapter loginAdapter;
+    // private LoginAdapter loginAdapter = new WireMockAdapter();
 
     public String getToken(String username, String password) throws UnirestException {
 
         String token = loginAdapter.getToken(username, password);
 
         return token;
-
-
     }
 
-    public boolean checkForAcces(String username, String application, String token) {
-        System.out.println("access checked");
-        return true;
+    public boolean checkForAcces(String username, String token) throws UnirestException {
+        boolean hasAccess = loginAdapter.checkForAcces(username, token);
+        return hasAccess;
     }
 }
