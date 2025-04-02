@@ -1,7 +1,9 @@
 # Software Guidebook Triptop
 
 ## 1. Introduction
+
 Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat een samenvatting van het volgende:
+
 1. De vereisten, beperkingen en principes.
 1. De software-architectuur, met inbegrip van de technologiekeuzes op hoog niveau en de structuur van de software.
 1. De ontwerp- en codebeslissingen die zijn genomen om de software te realiseren.
@@ -14,11 +16,11 @@ Dit software guidebook geeft een overzicht van de Triptop-applicatie. Het bevat 
 
 ![contextdiagram](diagrammen/contextdiagram/context-triptop.png)
 
-
 Toelichting op de context van de software inclusief System Context Diagram:
-* Functionaliteit
-* Gebruikers
-* Externe systemen
+
+- Functionaliteit
+- Gebruikers
+- Externe systemen
 
 ## 3. Functional Overview
 
@@ -61,14 +63,16 @@ Als gebruiker wil ik de bouwstenen van mijn reis flexibel kunnen uitbreiden met 
 ## 4. Quality Attributes
 
 Voordat deze casusomschrijving tot stand kwam, heeft de opdrachtgever de volgende ISO 25010 kwaliteitsattributen benoemd als belangrijk:
-* Compatibility -> Interoperability (Degree to which a system, product or component can exchange information with other products and mutually use the information that has been exchanged)
-* Reliability -> Fault Tolerance (Degree to which a system or component operates as intended despite the presence of hardware or software faults)
-* Maintainability -> Modularity (Degree to which a system or computer program is composed of discrete components such that a change to one component has minimal impact on other components)
-* Maintainability -> Modifiability (Degree to which a product or system can be effectively and efficiently modified without introducing defects or degrading existing product quality)
-* Security -> Integrity (Degree to which a system, product or component ensures that the state of its system and data are protected from unauthorized modification or deletion either by malicious action or computer error)
-* Security -> Confidentiality (Degree to which a system, product or component ensures that data are accessible only to those authorized to have access)
+
+- Compatibility -> Interoperability (Degree to which a system, product or component can exchange information with other products and mutually use the information that has been exchanged)
+- Reliability -> Fault Tolerance (Degree to which a system or component operates as intended despite the presence of hardware or software faults)
+- Maintainability -> Modularity (Degree to which a system or computer program is composed of discrete components such that a change to one component has minimal impact on other components)
+- Maintainability -> Modifiability (Degree to which a product or system can be effectively and efficiently modified without introducing defects or degrading existing product quality)
+- Security -> Integrity (Degree to which a system, product or component ensures that the state of its system and data are protected from unauthorized modification or deletion either by malicious action or computer error)
+- Security -> Confidentiality (Degree to which a system, product or component ensures that data are accessible only to those authorized to have access)
 
 ## 5. Constraints
+
 Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars zei niet doen for the record)
 
 ## 6. Principles
@@ -78,15 +82,14 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 
 ## 7. Software Architecture
 
-###     7.1. Containers
+### 7.1. Containers
 
 > [!IMPORTANT]
 > Voeg toe: Container Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
 
 ![containerdiagram](diagrammen/containerdiagram/containerdiagram.png)
 
-
-###     7.2. Components
+### 7.2. Components
 
 > [!IMPORTANT]
 > Voeg toe: Component Diagram plus een Dynamic Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -95,7 +98,7 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 
 ##### Individuele diagrammen
 
-Tijdens de lessen is ons verteld dat wij ook alleen het gezamenlijke componentdiagram konden maken. 
+Tijdens de lessen is ons verteld dat wij ook alleen het gezamenlijke componentdiagram konden maken.
 
 ##### Gezamenlijke comonentdiagram
 
@@ -105,7 +108,7 @@ Tijdens de lessen is ons verteld dat wij ook alleen het gezamenlijke componentdi
 
 ![component-frontend](diagrammen/componentdiagram/component-triptop-frontend.png)
 
-###     7.3. Design & Code
+### 7.3. Design & Code
 
 > [!IMPORTANT]
 > Voeg toe: Per ontwerpvraag een Class Diagram plus een Sequence Diagram van een aantal scenario's inclusief begeleidende tekst.
@@ -114,20 +117,52 @@ Tijdens de lessen is ons verteld dat wij ook alleen het gezamenlijke componentdi
 
 ```mermaid
 sequenceDiagram
-    participant Gebruiker
+title Inloggen
+    participant Frontend
+    participant AndereService
     participant LoginController
     participant LoginService
     participant LoginAdapter
     participant WireMockAdapter
 
-    Gebruiker->>LoginController: Verzoek om in te loggen (username, password)
+alt inloggen
+    Frontend->>LoginController: Verzoek om in te loggen (username, password)
     LoginController->>LoginService: Vraagt token op (username, password)
     LoginService->>LoginAdapter: Vraagt token op via een Identity provider (username, password)
     LoginAdapter->>WireMockAdapter: Vraagt token op via WireMock (username, password)
+    alt correct info to api
     WireMockAdapter-->>LoginAdapter: Token terug
     LoginAdapter-->>LoginService: Token terug
     LoginService-->>LoginController: Token terug
-    LoginController-->>Gebruiker: Token als cookie
+    LoginController-->>Frontend: Token als cookie
+    end
+    alt incorrect info to api
+    WireMockAdapter-->>LoginAdapter: Errormessage terug
+    LoginAdapter-->>LoginService: Errormessage terug
+    LoginService-->>LoginController: Errormessage terug
+    LoginController-->>Frontend: Errormessage laten zien
+    end
+end
+alt authorisatie
+    alt correct info to api
+    AndereService->>LoginService: Vraagt of Service actie mag uitvoeren (username, password)
+    LoginService->>LoginAdapter: Vraagt of Service actie mag uitvoeren (username, password)
+    LoginAdapter->>WireMockAdapter: Vraagt of Service actie mag uitvoeren (username, password)
+    WireMockAdapter-->>LoginAdapter: True
+    LoginAdapter-->>LoginService: True
+    LoginService-->>AndereService: True
+    end
+    alt incorrect info to api
+    AndereService->>LoginService: Vraagt of Service actie mag uitvoeren (username, password)
+    LoginService->>LoginAdapter: Vraagt of Service actie mag uitvoeren (username, password)
+    LoginAdapter->>WireMockAdapter: Vraagt of Service actie mag uitvoeren (username, password)
+    WireMockAdapter-->>LoginAdapter: False
+    LoginAdapter-->>LoginService: False
+    LoginService-->>AndereService: False
+    end
+end
+
+
 ```
 
 ```mermaid
@@ -181,8 +216,6 @@ BuildingBlockService --> LoginService : checks for auth
 User --> LoginService : uses
 
 ```
-
-
 
 #### Hoe kunnen we verschillende betalingssystemen integreren voor de verschillende bouwstenen? (Sacha)
 
@@ -308,7 +341,6 @@ TravelAdapter <|.. NSAdapter : implements
 TravelAdapter <|.. CarBooksAdapter : implements
 ```
 
-
 ## 8. Architectural Decision Records
 
 > [!IMPORTANT]
@@ -335,7 +367,6 @@ Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te 
 | Accommodatie::images     |                                  | Airbnb /search Property by place |                                   |                                         |
 | Accommodatie::title      |                                  | Airbnb /search Property by place |                                   | x                                       |
 
-
 #### Considered Options
 
 Frontend en Backend
@@ -351,7 +382,6 @@ Pending
 
 #### Consequences
 
-
 ### 8.2. Design Patterns
 
 #### Context
@@ -360,7 +390,6 @@ Voor de casusopdracht is er behoefte aan een flexibele integratie van verschille
 Elke provider heeft zijn eigen API met unieke implementatiedetails, wat kan leiden tot complexe en inconsistente integraties. Het is essentieel om een generieke manier te bieden om met deze verschillende systemen te communiceren zonder de kernlogica van de applicatie onnodig complex te maken.
 
 #### Considered Options
-
 
 #### Decision
 
@@ -388,7 +417,6 @@ Accepted
 
 ### 8.3. Overnachtingen - API
 
-
 #### Context
 
 Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief overnachtingen. Dit betekent dat we betrouwbare en actuele gegevens over hotels, appartementen en andere accommodaties nodig hebben.
@@ -396,6 +424,7 @@ Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te 
 #### Considered Options
 
 Waarom deze criteria:
+
 1. **Grootte van het aanbod**: Hoe meer accommodaties, hoe beter de keuze voor gebruikers.
 2. **Real-time prijsupdates**: Actuele prijzen zorgen voor betrouwbare informatie.
 3. **Integratiegemak**: Een goed gedocumenteerde API maakt snelle en gemakkelijke integratie mogelijk.
@@ -409,7 +438,9 @@ Waarom deze criteria:
 | **Integratiegemak**        | Goed gedocumenteerde REST API | Goed gedocumenteerde REST API                 | Hoge ontwikkelkosten     |
 | **Betaalmogelijkheden**    | Ingebouwd via Booking.com     | Ingebouwd via Hotels.com                      | ?                        |
 | **Wereldwijde dekking**    | Zeer uitgebreid wereldwijd    | Sterk, maar minder wereldwijd dan Booking.com | Beperkt tot eigen aanbod |
+
 ### Bronnen
+
 - https://www.booking.com/content/about.html?aid=304142&label=gen173rf-1FCAEoggI46AdIM1gDaKkBiAEBmAExuAEXyAEP2AEB6AEB-AECiAIBogILY2hhdGdwdC5jb22oAgO4Arrh9L4GwAIB0gIkOTAwNTkyM2YtYTMyNS00NWNhLTlhYjItZTg3NzMwZTFlNTcz2AIF4AIB&sid=8beb52740f0dbc937b1f47f33aa90b54
 - https://nl.hotels.com/
 
@@ -427,7 +458,6 @@ We hebben dit onderzoek nog niet heel erg grondig uitgevoerd en hierdoor zijn er
 
 ### 8.4. Flights ADR
 
-
 #### Context
 
 Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief vlucht. Dit betekent dat we betrouwbare en actuele gegevens over vluchten nodig hebben.
@@ -435,20 +465,23 @@ Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te 
 #### Considered Options
 
 Waarom deze criteria:
+
 1. **Data betrouwbaarheid en actualiteit**: Is de data betrouwbaar en actueel? Dus als een vlucht verandert verandert de api dan ook gelijk?
 2. **Prijs en toegankelijkheid**: Is de API zelf gratis en toegankelijk?
 3. **Integratiegemak**: Hoe makkelijk is het om te integreren in de applicatie?
 4. **Functionaliteit en beperkingen**: Sommige API’s bieden extra features zoals prijsvoorspellingen, filters op bagagekosten of CO₂-uitstoot. Wat voor functionaliteiten biedt de API?
 5. **Onderhoud**: Bestaat de API nog? Wordt hij onderhouden?
 
-| Factoren | Google flights-API | Flights-API |
-| --- | --- | --- |
-| Data betrouwbaarheid en actualiteit | Real-time vluchtinfo | Real-time vluchtinfo |
-| Prijs en toegankelijkheid | Gratis via RapidAPI | Gratis via website |
-| Integratiegemak | ++ | ++ |
-| Functionaliteit en beperkingen | Google flights focust zich op basisinfo | Data zoals prijzen beschikbaar naast vlucht info |
-| Onderhoud | Discontinued | Vervanger google flights |
+| Factoren                            | Google flights-API                      | Flights-API                                      |
+| ----------------------------------- | --------------------------------------- | ------------------------------------------------ |
+| Data betrouwbaarheid en actualiteit | Real-time vluchtinfo                    | Real-time vluchtinfo                             |
+| Prijs en toegankelijkheid           | Gratis via RapidAPI                     | Gratis via website                               |
+| Integratiegemak                     | ++                                      | ++                                               |
+| Functionaliteit en beperkingen      | Google flights focust zich op basisinfo | Data zoals prijzen beschikbaar naast vlucht info |
+| Onderhoud                           | Discontinued                            | Vervanger google flights                         |
+
 ##### Bronnen
+
 - https://aviationstack.com/
 - https://www.flightapi.io/blog/google-flight-api-history-and-alternative/
 
@@ -473,6 +506,7 @@ Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te 
 #### Considered Options
 
 ##### Waarom deze criteria:
+
 - **Diversiteit van activiteiten:** Een breed scala aan ervaringen maakt het platform aantrekkelijker.
 - **Real-time beschikbaarheid:** Actuele informatie over beschikbare tours en activiteiten voorkomt teleurstelling.
 - **Integratiegemak:** Een goed gedocumenteerde API maakt snelle en gemakkelijke integratie mogelijk.
@@ -481,15 +515,16 @@ Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te 
 
 ##### Vergelijking van opties
 
-| Factoren                | Tripadvisor API         | Expedia API         | Eigen database          |
-|------------------------|------------------------|---------------------|------------------------|
-| **Diversiteit van activiteiten** | Zeer uitgebreid        | Zeer uitgebreid     | Beperkt tot eigen aanbod |
-| **Real-time beschikbaarheid** | Ja                     | Ja                  | Nee                    |
-| **Integratiegemak**        | Goed gedocumenteerde REST API | Goed gedocumenteerde REST API | Hoge ontwikkelkosten |
-| **Gebruikersbeoordelingen**   | Ja, via Tripadvisor-platform | Ja, via Expedia-platform | Afhankelijk van eigen implementatie |
-| **Wereldwijde dekking**   | Uitgebreid wereldwijd  | Uitgebreid wereldwijd | Beperkt tot eigen aanbod |
+| Factoren                         | Tripadvisor API               | Expedia API                   | Eigen database                      |
+| -------------------------------- | ----------------------------- | ----------------------------- | ----------------------------------- |
+| **Diversiteit van activiteiten** | Zeer uitgebreid               | Zeer uitgebreid               | Beperkt tot eigen aanbod            |
+| **Real-time beschikbaarheid**    | Ja                            | Ja                            | Nee                                 |
+| **Integratiegemak**              | Goed gedocumenteerde REST API | Goed gedocumenteerde REST API | Hoge ontwikkelkosten                |
+| **Gebruikersbeoordelingen**      | Ja, via Tripadvisor-platform  | Ja, via Expedia-platform      | Afhankelijk van eigen implementatie |
+| **Wereldwijde dekking**          | Uitgebreid wereldwijd         | Uitgebreid wereldwijd         | Beperkt tot eigen aanbod            |
 
 ##### Bronnen
+
 - [Tripadvisor](https://www.tripadvisor.com/)
 - [Expedia Developer](https://developer.expediagroup.com/)
 
@@ -524,19 +559,20 @@ Extra benodigdheden:
 - Spring Security
 - Frontend
 
-Het lijkt erop dat WireMock en Auth0 dusdanig niet overeenkomen dat het ontwerp simpelweg ***niet*** kan werken met Auth0.
+Het lijkt erop dat WireMock en Auth0 dusdanig niet overeenkomen dat het ontwerp simpelweg **_niet_** kan werken met Auth0.
 
-| Criteria | WireMock | Auth0 |
-| --- | --- | --- |
-| Benodigdheden | Username
-Password | - Callback naar externe partij(Auth0)
+| Criteria      | WireMock                              | Auth0 |
+| ------------- | ------------------------------------- | ----- |
+| Benodigdheden | Username                              |
+| Password      | - Callback naar externe partij(Auth0) |
+
 - Frontend die callback maakt
 - Controller
 - Spring Security + configuratie
 - application.yml
 - JWT tokens |
-| Tokens | Token is een JSON object met token en expire datum. | Terugkrijgen token gebeurt op een andere manier, je krijgt eerder een ja/nee terug of je mag inloggen en niet een token ivm de callback structuur. |
-| Rolcheck | checkForAcces geeft de rol terug samen met de username en application. | Dit doet auth0 niet automatisch, hiervoor moet je zelf rollen inbouwen. Dit kan ook via Auth0 via hun dashboard. |
+  | Tokens | Token is een JSON object met token en expire datum. | Terugkrijgen token gebeurt op een andere manier, je krijgt eerder een ja/nee terug of je mag inloggen en niet een token ivm de callback structuur. |
+  | Rolcheck | checkForAcces geeft de rol terug samen met de username en application. | Dit doet auth0 niet automatisch, hiervoor moet je zelf rollen inbouwen. Dit kan ook via Auth0 via hun dashboard. |
 
 **Eventuele adapter pattern oplossing:**
 
@@ -551,13 +587,13 @@ Problemen die blijken vanuit het library onderzoek:
 
 Auth0 geeft de mogelijkheid om verschillende soorten demo’s op te zetten om hun service uit te proberen. Zo heb je 3 soorten applicaties die zij ‘aanbieden’:
 
-| Criteria | API | SPA (react) | ‘normale’ app (spring boot) |
-| --- | --- | --- | --- |
-| Past in ontwerp | Ja, zelf te ontwerpen van hoe de documentatie er uit ziet. Beetje het zelfde als hoe WireMock werkt qua opzetten, alleen dan met Auth0. | Ja en nee, alles wordt geregeld via de frontend hier. Dit zou dus niet passen in het login verwerken in de backend, maar je zou 2 soorten authenticatie kunnen gebruiken.  | Nee, je gebruikt een callback structuur beginnend in de controller. Vanaf hier maak je ook gebruik van spring security. Er is dus niet een adapter te maken, omdat je bij het aanroepen van de controller al rekening moet houden met Auth0. Een checkForAcces() in de service is dan al volledig onjuist. |
-| Gratis? | Nee, je kan wel gratis een API aanmaken, maar je moet wel zelf een domein hebben om de api op te hosten. | Ja. | Ja. |
-| Synchronisatie met andere authorisatie/authenticatie | Zou evt. kunnen met veel moeite. | Nee, moet via een dashboard met bijv. rollen. | Nee, moet via een dashboard met bijv. rollen. |
+| Criteria                                             | API                                                                                                                                     | SPA (react)                                                                                                                                                               | ‘normale’ app (spring boot)                                                                                                                                                                                                                                                                                |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Past in ontwerp                                      | Ja, zelf te ontwerpen van hoe de documentatie er uit ziet. Beetje het zelfde als hoe WireMock werkt qua opzetten, alleen dan met Auth0. | Ja en nee, alles wordt geregeld via de frontend hier. Dit zou dus niet passen in het login verwerken in de backend, maar je zou 2 soorten authenticatie kunnen gebruiken. | Nee, je gebruikt een callback structuur beginnend in de controller. Vanaf hier maak je ook gebruik van spring security. Er is dus niet een adapter te maken, omdat je bij het aanroepen van de controller al rekening moet houden met Auth0. Een checkForAcces() in de service is dan al volledig onjuist. |
+| Gratis?                                              | Nee, je kan wel gratis een API aanmaken, maar je moet wel zelf een domein hebben om de api op te hosten.                                | Ja.                                                                                                                                                                       | Ja.                                                                                                                                                                                                                                                                                                        |
+| Synchronisatie met andere authorisatie/authenticatie | Zou evt. kunnen met veel moeite.                                                                                                        | Nee, moet via een dashboard met bijv. rollen.                                                                                                                             | Nee, moet via een dashboard met bijv. rollen.                                                                                                                                                                                                                                                              |
 
-Deze tabel laat goed zien dat bij het maken van een prototype, dat echt gebruik maken van Auth0 niet in ons ontwerp past. Wel zou je een API kunnen maken zoals bij WireMock, maar dit is niet gratis en valt dus automatisch af. 
+Deze tabel laat goed zien dat bij het maken van een prototype, dat echt gebruik maken van Auth0 niet in ons ontwerp past. Wel zou je een API kunnen maken zoals bij WireMock, maar dit is niet gratis en valt dus automatisch af.
 
 #### Consequences
 
