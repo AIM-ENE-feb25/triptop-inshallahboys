@@ -256,15 +256,11 @@ classDiagram
         +processPayment(amount: double): boolean
     }
 
-    class TripadvisorAdapter {
+    class StripeAdapter {
         +processPayment(amount: double): boolean
     }
 
-    class BookingAPIAdapter {
-        +processPayment(amount: double): boolean
-    }
-
-    class TransportAdapter {
+    class PaypalAdapter {
         +processPayment(amount: double): boolean
     }
 
@@ -283,9 +279,8 @@ classDiagram
     PaymentController --> PaymentService : uses
     PaymentService --> PaymentAdapter : uses
     PaymentService --> PaymentRepository : uses
-    PaymentAdapter <|.. TripadvisorAdapter : implements
-    PaymentAdapter <|.. BookingAPIAdapter : implements
-    PaymentAdapter <|.. TransportAdapter : implements
+    PaymentAdapter <|.. PaypalAdapter : implements
+    PaymentAdapter <|.. StripeAdapter : implements
     PaymentService --> LoginService : checks for auth
 ```
 
@@ -392,16 +387,17 @@ Voor de casusopdracht is er behoefte aan een flexibele integratie van verschille
 Elke provider heeft zijn eigen API met unieke implementatiedetails, wat kan leiden tot complexe en inconsistente integraties. Het is essentieel om een generieke manier te bieden om met deze verschillende systemen te communiceren zonder de kernlogica van de applicatie onnodig complex te maken.
 
 #### Considered Options
+Omdat we aan het begin al gelijk het adapter pattern in ons Componenten diagram hadden verwerkt hebben we hier ook voor gekozen dus zijn er niet echt consdered options geweest.
 
 #### Decision
 
 Om de integratie van de verschillende betalingssystemen te standaardiseren en te vereenvoudigen, hebben we het Adapter Pattern toegepast. Dit patroon maakt het mogelijk om de verschillende externe API's te laten voldoen aan een uniforme interface binnen de applicatie.
 
-We introduceren een PaymentAdapter-interface, die door specifieke adapters wordt geïmplementeerd voor elke externe betalingsprovider, zoals TripadvisorAdapter, BookingAPIAdapter en VervoerAdapter. De PaymentService zal enkel met de PaymentAdapter-interface werken en niet direct met de externe API’s, waardoor de afhankelijkheden worden geminimaliseerd en uitbreidingen eenvoudiger worden.
+We introduceren een PaymentAdapter-interface, die worden geimplementeerd door PaypalApi en StripeApi dit zodat je trips kunt betalen. De PaymentService zal enkel met de PaymentAdapter-interface werken en niet direct met de externe API’s, waardoor de afhankelijkheden worden geminimaliseerd en uitbreidingen eenvoudiger worden.
 
 #### Status
 
-Accepted
+Ongoing
 
 #### Consequences
 
