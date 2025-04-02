@@ -145,6 +145,7 @@ alt inloggen
 end
 alt authorisatie
     alt correct info to api
+    Frontend->>AndereService: Vraagt via controller of gebruiker iets mag doen
     AndereService->>LoginService: Vraagt of Service actie mag uitvoeren (username, password)
     LoginService->>LoginAdapter: Vraagt of Service actie mag uitvoeren (username, password)
     LoginAdapter->>WireMockAdapter: Vraagt of Service actie mag uitvoeren (username, password)
@@ -153,6 +154,7 @@ alt authorisatie
     LoginService-->>AndereService: True
     end
     alt incorrect info to api
+    Frontend->>AndereService: Vraagt via controller of gebruiker iets mag doen
     AndereService->>LoginService: Vraagt of Service actie mag uitvoeren (username, password)
     LoginService->>LoginAdapter: Vraagt of Service actie mag uitvoeren (username, password)
     LoginAdapter->>WireMockAdapter: Vraagt of Service actie mag uitvoeren (username, password)
