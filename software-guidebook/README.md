@@ -93,6 +93,12 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 
 #### Backend
 
+##### Individuele diagrammen
+
+Tijdens de lessen is ons verteld dat wij ook alleen het gezamenlijke componentdiagram konden maken. 
+
+##### Gezamenlijke comonentdiagram
+
 ![component-backend](diagrammen/componentdiagram/component-triptop-backend.png)
 
 #### Frontend
@@ -460,6 +466,68 @@ Accepted
 #### Consequences
 
 Dit onderzoek is nog niet volledig onderzocht en er zijn nog veel onbekende nadelen van Expedia die we nog niet weten!
+
+### 8.6 Past ons ontwerp bij andere identity providers mbv het adapter pattern?
+
+#### Context
+
+Bij het authenticeren van Triptop maken wij tijdens het maken van een prototype WireMock. Om te kijken of dit uiteindelijk ook met andere authenticatie gaat werken, onderzoek ik het implementatie-plan en of dit werkt met Auth0.
+
+#### Considered options
+
+Auth0 & WireMock
+
+**Library**:
+
+Bronnen: https://auth0.com/docs/quickstart/webapp/java-spring-boot/interactive
+
+Extra benodigdheden:
+
+- Spring Security
+- Frontend
+
+Het lijkt erop dat WireMock en Auth0 dusdanig niet overeenkomen dat het ontwerp simpelweg ***niet*** kan werken met Auth0.
+
+| Criteria | WireMock | Auth0 |
+| --- | --- | --- |
+| Benodigdheden | Username
+Password | - Callback naar externe partij(Auth0)
+- Frontend die callback maakt
+- Controller
+- Spring Security + configuratie
+- application.yml
+- JWT tokens |
+| Tokens | Token is een JSON object met token en expire datum. | Terugkrijgen token gebeurt op een andere manier, je krijgt eerder een ja/nee terug of je mag inloggen en niet een token ivm de callback structuur. |
+| Rolcheck | checkForAcces geeft de rol terug samen met de username en application. | Dit doet auth0 niet automatisch, hiervoor moet je zelf rollen inbouwen. Dit kan ook via Auth0 via hun dashboard. |
+
+**Eventuele adapter pattern oplossing:**
+
+Een oplossing zou kunnen zijn om dit toch uitwisselbaar te maken met een andere authenticatie methode. Dit is wel een stuk complexer.
+
+Problemen die blijken vanuit het library onderzoek:
+
+- Controller zal moeten checken via een evt link of er gebruik wordt gemaakt van Auth0.
+- Rollen zouden tussen verschillende providers moeten kunnen wisselen, dus via een evt dashboard zou niet gesynchroniseerd kunnen zijn (bijv. een rol bij auth0 wel, maar bij WireMock niet).
+
+**Showroom:**
+
+Auth0 geeft de mogelijkheid om verschillende soorten demo’s op te zetten om hun service uit te proberen. Zo heb je 3 soorten applicaties die zij ‘aanbieden’:
+
+| Criteria | API | SPA (react) | ‘normale’ app (spring boot) |
+| --- | --- | --- | --- |
+| Past in ontwerp | Ja, zelf te ontwerpen van hoe de documentatie er uit ziet. Beetje het zelfde als hoe WireMock werkt qua opzetten, alleen dan met Auth0. | Ja en nee, alles wordt geregeld via de frontend hier. Dit zou dus niet passen in het login verwerken in de backend, maar je zou 2 soorten authenticatie kunnen gebruiken.  | Nee, je gebruikt een callback structuur beginnend in de controller. Vanaf hier maak je ook gebruik van spring security. Er is dus niet een adapter te maken, omdat je bij het aanroepen van de controller al rekening moet houden met Auth0. Een checkForAcces() in de service is dan al volledig onjuist. |
+| Gratis? | Nee, je kan wel gratis een API aanmaken, maar je moet wel zelf een domein hebben om de api op te hosten. | Ja. | Ja. |
+| Synchronisatie met andere authorisatie/authenticatie | Zou evt. kunnen met veel moeite. | Nee, moet via een dashboard met bijv. rollen. | Nee, moet via een dashboard met bijv. rollen. |
+
+Deze tabel laat goed zien dat bij het maken van een prototype, dat echt gebruik maken van Auth0 niet in ons ontwerp past. Wel zou je een API kunnen maken zoals bij WireMock, maar dit is niet gratis en valt dus automatisch af. 
+
+#### Consequences
+
+Voor het ontwerp is allleen WireMock te implementeren. Voor het gebruiken van een andere authenticatie service zoals Auth0 zal een ander ontwerp gemaakt moeten worden. Dit zou evt ook kunnen via de frontend kunnen en dan WireMock alsnog in de backend te laten. Hoe zinvol dit is, is over te discussiëren.
+
+#### Status
+
+Accepted
 
 ## 9. Deployment, Operation and Support
 
