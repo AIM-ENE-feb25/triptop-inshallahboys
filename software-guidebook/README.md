@@ -113,6 +113,24 @@ Tijdens de lessen is ons verteld dat wij ook alleen het gezamenlijke componentdi
 #### Hoe kunnen we verschillende identity providers met verschillende interfaces integreren voor het gehele systeem? (Chris)
 
 ```mermaid
+sequenceDiagram
+    participant Gebruiker
+    participant LoginController
+    participant LoginService
+    participant LoginAdapter
+    participant WireMockAdapter
+
+    Gebruiker->>LoginController: Verzoek om in te loggen (username, password)
+    LoginController->>LoginService: Vraagt token op (username, password)
+    LoginService->>LoginAdapter: Vraagt token op via een Identity provider (username, password)
+    LoginAdapter->>WireMockAdapter: Vraagt token op via WireMock (username, password)
+    WireMockAdapter-->>LoginAdapter: Token terug
+    LoginAdapter-->>LoginService: Token terug
+    LoginService-->>LoginController: Token terug
+    LoginController-->>Gebruiker: Token als cookie
+```
+
+```mermaid
 classDiagram
 
 class User {
@@ -169,6 +187,24 @@ User --> LoginService : uses
 #### Hoe kunnen we verschillende betalingssystemen integreren voor de verschillende bouwstenen? (Sacha)
 
 ```mermaid
+sequenceDiagram
+    participant Gebruiker
+    participant PaymentController
+    participant PaymentService
+    participant PaymentAdapter
+    participant PaymentRepository
+
+    Gebruiker->>PaymentController: Verzoek om betaling (provider, amount)
+    PaymentController->>PaymentService: processPayment(provider, amount)
+    PaymentService->>PaymentAdapter: processPayment(amount)
+    PaymentAdapter-->>PaymentService: Betalingsresultaat
+    PaymentService->>PaymentRepository: saveTransaction(transactionId, provider, amount, status)
+    PaymentRepository-->>PaymentService: Opslag bevestigd
+    PaymentService-->>PaymentController: Betalingsresultaat
+    PaymentController-->>Gebruiker: HTTP-response met resultaat
+```
+
+```mermaid
 classDiagram
     class PaymentController {
         +processPayment(provider: String, amount: double): ResponseEntity<String>
@@ -219,6 +255,8 @@ classDiagram
 ```
 
 #### Hoe kunnen we verschillende externe vervoersservices (zoals Google Maps of een veerdienst API) integreren zonder afhankelijk te worden van hun specifieke implementaties? (Youp)
+
+![sequentiediagram-bouwsteen-youp](diagrammen/sequentiediagram/sequentiediagram-youp-bouwsteen.png)
 
 ```mermaid
 classDiagram
