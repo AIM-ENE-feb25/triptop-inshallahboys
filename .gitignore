@@ -85,3 +85,11 @@ build/
 
 # Kroki cashed svg's
 kroki
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+### dev properties ###
+/Week3/Triptop/src/main/resources/application-dev.properties

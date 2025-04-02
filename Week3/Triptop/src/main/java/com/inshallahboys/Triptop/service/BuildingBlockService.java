@@ -1,5 +1,6 @@
 package com.inshallahboys.Triptop.service;
 
+
 import com.inshallahboys.Triptop.adapter.travel.TravelAdapter;
 import com.inshallahboys.Triptop.domain.User;
 import com.mashape.unirest.http.exceptions.UnirestException;

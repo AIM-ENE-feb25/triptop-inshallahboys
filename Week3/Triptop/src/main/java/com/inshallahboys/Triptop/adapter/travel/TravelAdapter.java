@@ -1,6 +1,5 @@
 package com.inshallahboys.Triptop.adapter.travel;
 
-import com.inshallahboys.Triptop.domain.Route;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.stereotype.Component;
 
