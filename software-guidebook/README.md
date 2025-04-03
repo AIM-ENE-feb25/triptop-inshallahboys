@@ -290,52 +290,39 @@ classDiagram
 
 ```mermaid
 classDiagram
+    class BuildingBlockController {
+        +getTravelData(String locationStart, String locationEnd, String transportType): String
+    }
 
-class BuildingBlockController {
-    + saveBuildingBlock(Integer id, String start, String end): ResponseEntity<Integer, String>
-}
+    class BuildingBlockService {
+        LoginService loginService
+        +getTravelData(String locationStart, String locationEnd, String transportType, User user): String
+    }
 
-class BuildingBlockService {
-    loginService: LoginService
-    + saveBuildingBlock(Integer id, String start, String end): void
-}
+    class LoginService {
+        -getToken(String username, String password): ResponseEntity<String>
+        +checkForAcces(String username, String application, String token): boolean
+    }
 
-class LoginService{
-    -getToken(username, password) : ResponseEntity<String>
-    +checkForAcces(String username, String application, String token) : boolean
-}
+    class TravelAdapter {
+        <<interface>>
+        +getRoute(String locationStart, String locationEnd): String
+    }
 
-class Route {
-    - locationStart: String
-    - locationEnd: String
-    - id: Integer
-    - type: String
-}
+    class NSAdapter {
+        +getRoute(String locationStart, String locationEnd): String
+    }
 
-class TravelAdapter {
-    <<interface>>
-    + getRoute(String start, String end, Integer id): Route
-}
+    class CarBooksAdapter {
+        +getRoute(String locationStart, String locationEnd): String
+    }
 
-class flightsAPI {
-    + getRoute(Location start, Location end, Integer): Route
-}
+    BuildingBlockController --> BuildingBlockService : uses
+    BuildingBlockService --> LoginService : checks if user is auth
+    BuildingBlockService --> TravelAdapter : uses
 
-class NSAdapter {
-    + getRoute(String start, String end, Integer id): Route
-}
-
-class CarBooksAdapter {
-    + getRoute(String start, String end, Integer id): Route
-}
-
-BuildingBlockController --> BuildingBlockService : uses
-BuildingBlockService --> LoginService : checks if user is auth
-BuildingBlockService --> TravelAdapter : uses
-BuildingBlockService --> Route : uses
-TravelAdapter <|.. flightsAPI : implements
-TravelAdapter <|.. NSAdapter : implements
-TravelAdapter <|.. CarBooksAdapter : implements
+    TravelAdapter <|.. NSAdapter : implements
+    TravelAdapter <|.. CarBooksAdapter : implements
 ```
 
 ## 8. Architectural Decision Records
@@ -343,41 +330,330 @@ TravelAdapter <|.. CarBooksAdapter : implements
 > [!IMPORTANT]
 > Voeg toe: 3 tot 5 ADR's die beslissingen beschrijven die zijn genomen tijdens het ontwerpen en bouwen van de software.
 
-### 8.1. Airbnb API
+### 8.1. VervoersAdapter Frontend of backend
 
-#### Context
-
-Voor Triptop willen we reizigers een soepele manier bieden om hun reis samen te stellen, inclusief overnachtingen. Dit betekent dat we betrouwbare en actuele gegevens over hotels, appartementen en andere accommodaties nodig hebben.
-
-| Class::Attribuut         | Is input voor API+Endpoint       | Wordt gevuld door API+Endpoint   | Wordt geleverd door eindgebruiker | Moet worden opgeslagen in de applicatie |
-| ------------------------ | -------------------------------- | -------------------------------- | --------------------------------- | --------------------------------------- |
-| Accommodatie::location   | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::currency   | Airbnb /search Property by place |                                  | x                                 |                                         |
-| Accommodatie::adults     | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::children   | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::checkin    | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::checkout   | Airbnb /search Property by place |                                  | x                                 | x                                       |
-| Accommodatie::priceMin   | Airbnb /search Property by place |                                  | x                                 |                                         |
-| Accommodatie::priceMax   | Airbnb /search Property by place |                                  | x                                 |                                         |
-| Accommodatie::starRating |                                  | Airbnb /search Property by place |                                   |                                         |
-| Accommodatie::price      |                                  | Airbnb /search Property by place |                                   | x                                       |
-| Accommodatie::images     |                                  | Airbnb /search Property by place |                                   |                                         |
-| Accommodatie::title      |                                  | Airbnb /search Property by place |                                   | x                                       |
-
-#### Considered Options
-
-Frontend en Backend
-
-#### Decision
-
-> [!TIP]
-> This section describes our response to the forces/problem. It is stated in full sentences, with active voice. "We will …"
+02-04-2025
 
 #### Status
+accepted
 
-Pending
+#### Context
+Voor TripTop willen gebruikers bij hun tripvoorstellen ook verschillende vervoersopties kunnen bekijken. Nu moeten we bepalen waar de vervoersadapters het beste geplaatst kunnen worden: in de backend of in de frontend.
 
+#### Considered Options
+##### Backend
+###### Controller
+```java
+@RestController  
+public class BuildingBlockController {  
+  
+    @Autowired  
+    private BuildingBlockService buildingBlockService;  
+  
+    @GetMapping("/traveldata")  
+    public String getTravelData(@RequestParam String locationStart  
+            , @RequestParam String locationEnd, @RequestParam String transportType) throws UnirestException {  
+        User user = new User("edevries", "3g2Rw9sT1x");  
+  
+        return buildingBlockService.getTravelData(locationStart, locationEnd, transportType, user);  
+    }  
+}
+```
+
+###### Service
+```java
+@Service  
+public class BuildingBlockService {  
+  
+    @Autowired  
+    private LoginService loginService;  
+  
+    @Autowired  
+    @Qualifier("NSAdapter")  
+    private TravelAdapter nsAdapter;  
+  
+    @Autowired  
+    @Qualifier("drivingDirectionAdapter") // first letter cannot be capital  
+    private TravelAdapter drivingDirectionAdapter;  
+  
+    public String getTravelData(String locationStart, String locationEnd, String transportType, User user) throws UnirestException {  
+        String result = "";  
+        String token = loginService.getToken(user.username(), user.password());  
+   
+        if(loginService.checkForAcces(user.username(), token)) {  
+            switch (transportType) {  
+                case "TRAIN":  
+                    result = nsAdapter.getRoute(locationStart, locationEnd);  
+                    break;  
+                case "CAR":  
+	                result = drivingDirectionAdapter.getRoute(locationStart, locationEnd);  
+                    break;  
+                default:  
+            }  
+        } else {  
+            return "no access";  
+        }  
+        return result;  
+    }  
+}
+```
+
+###### Adapter Interface
+```java
+@Component  
+public interface TravelAdapter {  
+    String getRoute(String locationStart, String locationEnd) throws UnirestException;  
+}
+```
+
+###### NSAdapter
+```java
+@Component  
+public class NSAdapter implements TravelAdapter{  
+    @Value("${nsApiKey}")  
+    private String apiKey;  
+  
+    @Override  
+    public String getRoute(String locationStart, String locationEnd) throws UnirestException {  
+        HttpResponse<JsonNode> response = Unirest.get("https://gateway.apiportal.ns.nl/reisinformatie-api/api/v3/trips?" + "fromStation=" + locationStart + "&toStation=" + locationEnd)  
+                .header("Content-Type", "application/json")  
+                .header("Cache-Control", "no-cache")  
+                .header("Ocp-Apim-Subscription-Key", apiKey)  
+                .asJson();  
+  
+        JSONObject jsonObject = response.getBody().getObject();  
+        JSONArray trips = jsonObject.getJSONArray("trips");  
+  
+        StringBuilder result = new StringBuilder();  
+  
+        if(trips.length() > 0) {  
+            for (int i = 0; i < trips.length(); i++) {  
+                JSONObject trip = trips.getJSONObject(i).getJSONArray("legs").getJSONObject(0);  
+  
+                String transportType = trip.getJSONObject("product").getString("longCategoryName");  
+                String departureTime = trip.getJSONObject("origin").getString("plannedDateTime");  
+                String arrivalTime = trip.getJSONObject("destination").getString("plannedDateTime");  
+                int priceInCents = trips.getJSONObject(i).getJSONArray("fares").getJSONObject(0).getInt("priceInCents");  
+                double price = priceInCents / 100.0;  
+  
+                result.append(String.format("Option %d: Transport Type: %s, Departure Time: %s, Arrival Time: %s, Price: €%.2f\n", i + 1, transportType, departureTime, arrivalTime, price));  
+            }  
+        } else {  
+            result.append("No routes found.");  
+        }  
+        return result.toString();  
+    }  
+}
+```
+
+##### DrivingDirectionAdapter
+```java
+@Component  
+public class DrivingDirectionAdapter implements TravelAdapter{  
+    @Value("${drivingDirectionApiKey}")  
+    private String apiKey;  
+  
+    @Override  
+    public String getRoute(String locationStart, String locationEnd) throws UnirestException {  
+        HttpResponse<JsonNode> response = Unirest.get("https://driving-directions1.p.rapidapi.com/get-directions?" + "origin=" + locationStart + "&destination=" + locationEnd + "&distance_units=km&avoid_routes=tolls%2Cferries&country=nl&language=en")  
+                .header("Content-Type", "application/json")  
+                .header("x-rapidapi-key", apiKey)  
+                .header("x-rapidapi-host", "driving-directions1.p.rapidapi.com")  
+                .asJson();  
+  
+        StringBuilder result = new StringBuilder();  
+  
+        JSONObject jsonObject = response.getBody().getObject();  
+        JSONObject data = jsonObject.getJSONObject("data");  
+        JSONObject origin = data.getJSONObject("origin");  
+        JSONObject destination = data.getJSONObject("destination");  
+        JSONArray bestRoutes = data.getJSONArray("best_routes");  
+  
+        if (bestRoutes.length() > 0) {  
+            JSONObject bestRoute = bestRoutes.getJSONObject(0);  
+            String distanceLabel = bestRoute.getString("distance_label");  
+            String durationLabel = bestRoute.getString("duration_label");  
+  
+            result.append(String.format("Origin: %s, Destination: %s, Distance: %s, Duration: %s",  
+                    origin.getString("name"), destination.getString("name"), distanceLabel, durationLabel));  
+        } else {  
+            result.append("No routes found.");  
+        }  
+  
+        return result.toString();  
+    }  
+}
+```
+
+##### Frontend
+###### TravelService
+```javascript
+export class TravelService {
+    async getRoutes(origin, destination) {
+      throw new Error('Method not implemented');
+    }
+  }
+```
+
+###### NSAdapter
+```javascript
+export class NSAdapter extends TravelService  {
+    constructor() {
+      this.apiKey = import.meta.env.VITE_NS_API_KEY;
+    }
+    
+    async getRoutes(origin, destination) {
+      const response = await fetch(
+        `https://gateway.apiportal.ns.nl/reisinformatie-api/api/v3/trips?fromStation=${origin}&toStation=${destination}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache',
+            'Ocp-Apim-Subscription-Key': this.apiKey,
+            'Origin': 'http://localhost:5173'
+          }
+        }
+      );
+      const jsonData = await response.json();
+      const trips = jsonData.trips;
+      if (trips.length === 0) {
+        return [];
+      }
+      return trips.map(trip => {
+        const leg = trip.legs[0];
+        return {
+          origin: leg.origin.name,
+          destination: leg.destination.name,
+          departureTime: leg.origin.plannedDateTime,
+          arrivalTime: leg.destination.plannedDateTime
+        };
+      });
+    }
+  }
+```
+
+###### DrivingDirectionAdapter
+```javascript
+export class DrivingAdapter extends TravelService {
+    constructor() {
+      this.apiKey = import.meta.env.VITE_DRIVING_API_KEY;
+    }
+    async getRoutes(origin, destination) {
+      const response = await fetch(
+        `https://driving-directions1.p.rapidapi.com/get-directions?origin=${origin}&destination=${destination}&distance_units=km&avoid_routes=tolls%2Cferries&country=nl&language=en`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-rapidapi-key': this.apiKey,
+            'x-rapidapi-host': 'driving-directions1.p.rapidapi.com'
+          }
+        }
+      );
+
+      const jsonData = await response.json();
+      const data = jsonData.data;
+      if (!data.best_routes || data.best_routes.length === 0) {
+        return [];
+      }
+
+      const route = data.best_routes[0];
+      const now = new Date();
+      const durationInMinutes = Math.round(route.duration_seconds / 60);
+      const arrivalTime = new Date(now.getTime() + (durationInMinutes * 60 * 1000));
+      return [{
+        origin: data.origin.name,
+        destination: data.destination.name,
+        departureTime: now.toLocaleTimeString(),
+        arrivalTime: arrivalTime.toLocaleTimeString()
+      }];
+    }
+  }
+```
+
+###### TransportAdapter
+```javascript
+import { useState } from 'react';
+import { NSAdapter } from '../adapters/NSAdapter';
+import { DrivingAdapter } from '../adapters/DrivingAdapter';
+
+function TransportAdapter({ origin, destination, transportType }) {
+  const [routes, setRoutes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const NS_API_KEY = import.meta.env.VITE_NS_API_KEY;
+  const DRIVING_API_KEY = import.meta.env.VITE_DRIVING_API_KEY;
+
+  const getAdapter = (type) => {
+    switch (type) {
+      case 'train':
+        return new NSAdapter(NS_API_KEY);
+      case 'car':
+        return new DrivingAdapter(DRIVING_API_KEY);
+      default:
+        throw new Error('Unsupported transport type');
+    }
+  }; 
+
+  const fetchRoutes = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const adapter = getAdapter(transportType);
+      const routeResults = await adapter.getRoutes(origin, destination);
+      if (routeResults.length > 0) {
+        setRoutes(routeResults);
+      } else {
+        setRoutes([]);
+        setError('No routes found.');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={fetchRoutes}>Find Routes</button>
+      {loading && <p>Loading routes...</p>}
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      {routes.length > 0 && (
+        <div>
+          <h3>Available Routes:</h3>
+          <ul>
+            {routes.map((route, index) => (
+              <li key={index}>
+                <p>Origin: {route.origin}</p>
+                <p>Destination: {route.destination}</p>
+                <p>Departure Time: {route.departureTime}</p>
+                <p>Arrival Time: {route.arrivalTime}</p>
+                <hr />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+} 
+
+export default TransportAdapter;
+```
+
+#### Decision
+Nadat ik het Adapter Pattern had uitgewerkt in zowel de backend als de frontend, werkte het in beide gevallen prima. Toen ik de verschillen tussen de twee bekeek, kwam ik er eigenlijk achter dat er maar één echt verschil was: de backend-implementatie was in Java en de frontend in JavaScript. Dat gaf me nog geen duidelijke reden om voor de ene of de andere te kiezen.
+Daarom ben ik gaan nadenken over wat het beste zou werken voor de applicatie. Uiteindelijk besloot ik om beide te gebruiken: de frontend laat de data zien, zodat de gebruiker een keuze kan maken. Zodra die keuze is gemaakt, stuurt de frontend de gegevens om die data optezoeken naar de backend, die via een API-request de benodigde informatie ophaalt en opslaat in de database. 
 #### Consequences
+**Positief**:
+- Directe feedback aan gebruikers tijdens het zoeken naar routes
+- Duidelijke scheiding tussen presentatie en gegevensopslag
+- Eenvoudig nieuwe vervoersaanbieders toe te voegen in beide lagen
+
+**Negatief**:
+- Twee sets adapters moeten worden onderhouden
+- Frontend en backend implementaties moeten gesynchroniseerd blijven
 
 ### 8.2. Design Patterns
 
