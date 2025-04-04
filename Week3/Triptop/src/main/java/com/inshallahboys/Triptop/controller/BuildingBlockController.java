@@ -18,6 +18,9 @@ public class BuildingBlockController {
     @GetMapping("/traveldata")
     public String getTravelData(@RequestParam String locationStart
             , @RequestParam String locationEnd, @RequestParam String transportType) throws UnirestException {
+
+        // Omdat het een prototype is, maken we hier gebruik van een set User.
+        // De token zou normaliter vanuit de frontend komen.
         User user = new User("edevries", "3g2Rw9sT1x");
 
         return buildingBlockService.getTravelData(locationStart, locationEnd, transportType, user);
