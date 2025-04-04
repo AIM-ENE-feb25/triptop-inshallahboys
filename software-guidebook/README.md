@@ -177,11 +177,11 @@ class User {
 }
 
 class LoginController{
-    getToken(username, password)
+    login(User user)
 }
 
 class LoginService{
-    -user : User
+    -loginAdapter: LoginAdapter
     -getToken(username, password) : ResponseEntity<String>
     +checkForAccess(String username, String token) : boolean
 }
@@ -212,7 +212,7 @@ class BuildingBlockService {
 
 LoginController --> LoginService : sends data
 LoginService --> LoginAdapter : sends data to adapter
-LoginAdapter ..> WireMockAdapter : implements
+LoginAdapter <.. WireMockAdapter : implements
 PaymentService --> LoginService : checks for auth
 BuildingBlockService --> LoginService : checks for auth
 User --> LoginService : uses
