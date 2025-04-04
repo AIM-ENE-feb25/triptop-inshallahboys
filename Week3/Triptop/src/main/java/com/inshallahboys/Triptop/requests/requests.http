@@ -1,0 +1,18 @@
+###
+POST http://localhost:8080/api/payments/process?amount=10.00&paymentType=paypal
+
+
+###
+
+POST http://localhost:8080/api/payments/process?amount=10.00&paymentType=stripe
+
+
+###
+
+GET http://localhost:8080/traveldata?locationStart=Nijmegen&locationEnd=Oss&transportType=TRAIN
+
+###
+
+GET http://localhost:8080/traveldata?locationStart=Nijmegen&locationEnd=Oss&transportType=CAR
+
+###
