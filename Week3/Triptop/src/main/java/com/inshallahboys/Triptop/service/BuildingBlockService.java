@@ -25,14 +25,14 @@ public class BuildingBlockService {
     public String getTravelData(String locationStart, String locationEnd, String transportType, User user) throws UnirestException {
 
 
-
         String result = "";
 
+
+        // Omdat het een prototype is, maken we hier gebruik van een set User.
+        // De token zou normaliter vanuit de frontend komen.
         String token = loginService.getToken(user.username(), user.password());
 
-
-
-        if(loginService.checkForAcces(user.username(), token)) {
+        if (loginService.checkForAcces(user.username(), token)) {
             switch (transportType) {
                 case "TRAIN":
                     result = nsAdapter.getRoute(locationStart, locationEnd);
