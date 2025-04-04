@@ -899,7 +899,7 @@ We raden aan om IntelliJ te gebruiken. Open de backend in een nieuw venster door
 ### Front-end
 Run de front-end vanuit de Week3\triptopfe directory
 npm install
-npm run start
+npm run dev
 
 
 ## Planning
