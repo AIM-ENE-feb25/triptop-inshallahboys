@@ -183,18 +183,18 @@ class LoginController{
 class LoginService{
     -user : User
     -getToken(username, password) : ResponseEntity<String>
-    +checkForAcces(String username, String application, String token) : boolean
+    +checkForAccess(String username, String token) : boolean
 }
 
 class LoginAdapter{
     <<interface>>
     getToken(username, password)
-    checkForAcces(String username, String application, String token)
+    checkForAccess(String username, String token)
 }
 
 class WireMockAdapter{
     getToken(username, password)
-    checkForAcces(String username, String application, String token)
+    checkForAccess(String username, String token)
 }
 
 
@@ -272,7 +272,7 @@ classDiagram
     class LoginService{
         -user : User
         -getToken(username, password) : ResponseEntity<String>
-        +checkForAcces(String username, String application, String token) : boolean
+        +checkForAccess(String username, String token) : boolean
     }
 
     %% Relaties tussen de klassen
@@ -308,6 +308,10 @@ classDiagram
         <<interface>>
         +getRoute(String locationStart, String locationEnd): String
     }
+class LoginService{
+    -getToken(username, password) : ResponseEntity<String>
+    +checkForAccess(String username, String token) : boolean
+}
 
     class NSAdapter {
         +getRoute(String locationStart, String locationEnd): String
@@ -846,7 +850,7 @@ Het lijkt erop dat WireMock en Auth0 dusdanig niet overeenkomen dat het ontwerp 
 - application.yml
 - JWT tokens |
   | Tokens | Token is een JSON object met token en expire datum. | Terugkrijgen token gebeurt op een andere manier, je krijgt eerder een ja/nee terug of je mag inloggen en niet een token ivm de callback structuur. |
-  | Rolcheck | checkForAcces geeft de rol terug samen met de username en application. | Dit doet auth0 niet automatisch, hiervoor moet je zelf rollen inbouwen. Dit kan ook via Auth0 via hun dashboard. |
+  | Rolcheck | checkForAccess geeft de rol terug samen met de username en application. | Dit doet auth0 niet automatisch, hiervoor moet je zelf rollen inbouwen. Dit kan ook via Auth0 via hun dashboard. |
 
 **Eventuele adapter pattern oplossing:**
 
@@ -863,7 +867,7 @@ Auth0 geeft de mogelijkheid om verschillende soorten demo’s op te zetten om hu
 
 | Criteria                                             | API                                                                                                                                     | SPA (react)                                                                                                                                                               | ‘normale’ app (spring boot)                                                                                                                                                                                                                                                                                |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Past in ontwerp                                      | Ja, zelf te ontwerpen van hoe de documentatie er uit ziet. Beetje het zelfde als hoe WireMock werkt qua opzetten, alleen dan met Auth0. | Ja en nee, alles wordt geregeld via de frontend hier. Dit zou dus niet passen in het login verwerken in de backend, maar je zou 2 soorten authenticatie kunnen gebruiken. | Nee, je gebruikt een callback structuur beginnend in de controller. Vanaf hier maak je ook gebruik van spring security. Er is dus niet een adapter te maken, omdat je bij het aanroepen van de controller al rekening moet houden met Auth0. Een checkForAcces() in de service is dan al volledig onjuist. |
+| Past in ontwerp                                      | Ja, zelf te ontwerpen van hoe de documentatie er uit ziet. Beetje het zelfde als hoe WireMock werkt qua opzetten, alleen dan met Auth0. | Ja en nee, alles wordt geregeld via de frontend hier. Dit zou dus niet passen in het login verwerken in de backend, maar je zou 2 soorten authenticatie kunnen gebruiken. | Nee, je gebruikt een callback structuur beginnend in de controller. Vanaf hier maak je ook gebruik van spring security. Er is dus niet een adapter te maken, omdat je bij het aanroepen van de controller al rekening moet houden met Auth0. Een checkForAccess() in de service is dan al volledig onjuist. |
 | Gratis?                                              | Nee, je kan wel gratis een API aanmaken, maar je moet wel zelf een domein hebben om de api op te hosten.                                | Ja.                                                                                                                                                                       | Ja.                                                                                                                                                                                                                                                                                                        |
 | Synchronisatie met andere authorisatie/authenticatie | Zou evt. kunnen met veel moeite.                                                                                                        | Nee, moet via een dashboard met bijv. rollen.                                                                                                                             | Nee, moet via een dashboard met bijv. rollen.                                                                                                                                                                                                                                                              |
 
