@@ -80,6 +80,8 @@ Lars vindt dit stom, dus wij hebben als tip gekregen dit niet te doen :). (Lars 
 > [!IMPORTANT]
 > Beschrijf zelf de belangrijkste architecturele en design principes die zijn toegepast in de software.
 
+We gebruiken Open/Closed principle dit kan je in onze code terug vinden. Doordat we elke keer een interface gebruiken betekend dat we niet direct bestaande code aanpassen om nieuwe functionaliteiten toe te voegen. We implementen de interface en schrijven daar alle code voor de nieuwe functionaliteit.
+
 ## 7. Software Architecture
 
 ### 7.1. Containers
