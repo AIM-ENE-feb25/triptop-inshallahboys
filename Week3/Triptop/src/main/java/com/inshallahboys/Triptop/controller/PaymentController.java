@@ -2,6 +2,7 @@ package com.inshallahboys.Triptop.controller;
 
 import com.inshallahboys.Triptop.domain.User;
 import com.inshallahboys.Triptop.service.PaymentService;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,7 +19,7 @@ public class PaymentController {
     @PostMapping("/process")
     public String processPayment(
             @RequestParam String amount,
-            @RequestParam(required = false, defaultValue = "paypal") String paymentType) {
+            @RequestParam(required = false, defaultValue = "paypal") String paymentType) throws UnirestException {
 
         // Omdat het een prototype is, maken we hier gebruik van een set User.
         // De token zou normaliter vanuit de frontend komen.
