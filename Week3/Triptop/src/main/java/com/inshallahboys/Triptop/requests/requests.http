@@ -13,6 +13,6 @@ GET http://localhost:8080/traveldata?locationStart=Nijmegen&locationEnd=Oss&tran
 
 ###
 
-GET http://localhost:8080/traveldata?locationStart=Nijmegen&locationEnd=Oss&transportType=CAR
+GET http://localhost:8080/traveldata?locationStart=Nijmegen&locationEnd=Arnhem&transportType=CAR
 
 ###
