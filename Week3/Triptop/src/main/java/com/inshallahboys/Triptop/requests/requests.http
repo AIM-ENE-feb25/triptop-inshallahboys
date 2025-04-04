@@ -16,3 +16,15 @@ GET http://localhost:8080/traveldata?locationStart=Nijmegen&locationEnd=Oss&tran
 GET http://localhost:8080/traveldata?locationStart=Nijmegen&locationEnd=Arnhem&transportType=CAR
 
 ###
+
+
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "edevries",
+  "password": "3g2Rw9sT1x"
+}
+
+###
+
