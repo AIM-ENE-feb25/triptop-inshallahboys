@@ -1,6 +1,8 @@
 package com.inshallahboys.Triptop.service;
 
 import com.inshallahboys.Triptop.adapter.Payment.PaymentAdapter;
+import com.inshallahboys.Triptop.domain.User;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,12 @@ public class PaymentService {
     @Qualifier("stripeAdapter")
     private PaymentAdapter stripeAdapter;
 
-    public String processPayment(String amount, String paymentType) {
-        if (loginService.checkForAcces("username", "TripTop", "token")) {
+    public String processPayment(String amount, String paymentType, User user) throws UnirestException {
+
+        // Omdat het een prototype is, maken we hier gebruik van een set User.
+        // De token zou normaliter vanuit de frontend komen.
+        String token = loginService.getToken(user.username(), user.password());
+        if (loginService.checkForAcces(user.username(), token)) {
 
             PaymentAdapter paymentAdapter;
             if ("stripe".equalsIgnoreCase(paymentType)) {

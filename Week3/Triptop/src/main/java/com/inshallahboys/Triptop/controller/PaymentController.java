@@ -1,5 +1,6 @@
 package com.inshallahboys.Triptop.controller;
 
+import com.inshallahboys.Triptop.domain.User;
 import com.inshallahboys.Triptop.service.PaymentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,11 @@ public class PaymentController {
             @RequestParam String amount,
             @RequestParam(required = false, defaultValue = "paypal") String paymentType) {
 
-        return paymentService.processPayment(amount, paymentType);
+        // Omdat het een prototype is, maken we hier gebruik van een set User.
+        // De token zou normaliter vanuit de frontend komen.
+        User user = new User("edevries", "3g2Rw9sT1x");
+
+        return paymentService.processPayment(amount, paymentType, user);
     }
 }
 
