@@ -886,6 +886,20 @@ Accepted
 > [!TIP]
 > Zelf beschrijven van wat je moet doen om de software te installeren en te kunnen runnen.
 
+frontend url is standaard http://localhost:5173/
+backend url is standaard http://localhost:8080/
+
+### Back-end
+Run de back-end vanuit de Week3\Triptop directory
+We raden aan om IntelliJ te gebruiken. Open de backend in een nieuw venster door het commando idea . te gebruiken in de bovenstaande directory. Gebruik daarna de run-knop in IntelliJ.
+
+
+### Front-end
+Run de front-end vanuit de Week3\triptopfe directory
+npm install
+npm run start
+
+
 ## Planning
 
 **Maandag**: Prototype.
